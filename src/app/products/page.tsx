@@ -40,15 +40,12 @@ export async function generateMetadata({ searchParams }: { searchParams: SearchP
 /** Price sorts are gone with the prices — there is nothing to sort on. */
 function sortProducts(products: Product[], sort?: string): Product[] {
   switch (sort) {
-    case "name":
-      return [...products].sort((a, b) => a.name.localeCompare(b.name));
     case "newest":
       return [...products].sort((a, b) => b.updatedAt.localeCompare(a.updatedAt));
+    case "name":
     default:
-      // Default order puts the most-rented items first.
-      return [...products].sort(
-        (a, b) => Number(b.badges.includes("bestseller")) - Number(a.badges.includes("bestseller")),
-      );
+      // Default order arranges all equipment in alphabetical order (A–Z)
+      return [...products].sort((a, b) => a.name.localeCompare(b.name));
   }
 }
 

@@ -1601,7 +1601,7 @@ export const PRODUCTS: Product[] = [
 /* -------------------------------------------------------------------------- */
 
 export function getAllProducts(): Product[] {
-  return PRODUCTS;
+  return [...PRODUCTS].sort((a, b) => a.name.localeCompare(b.name));
 }
 
 export function getProduct(slug: string): Product | undefined {

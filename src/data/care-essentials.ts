@@ -362,7 +362,7 @@ export const CARE_ESSENTIALS: CareEssential[] = [
 /* -------------------------------------------------------------------------- */
 
 export function getAllCareEssentials(): CareEssential[] {
-  return CARE_ESSENTIALS;
+  return [...CARE_ESSENTIALS].sort((a, b) => a.name.localeCompare(b.name));
 }
 
 export function getCareEssential(slug: string): CareEssential | undefined {

@@ -54,7 +54,7 @@ export function CategoryGrid() {
   return (
     <section id="categories" className="scroll-mt-24 py-16 lg:py-20">
       <Container>
-        <SectionLabel index={1} align="center">
+        <SectionLabel index={2} align="center">
           What we supply
         </SectionLabel>
 

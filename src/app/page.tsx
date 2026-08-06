@@ -79,12 +79,10 @@ export default function HomePage() {
 
       <Hero />
 
-      <CategoryGrid />
-
-      {/* 02 — Trending / featured */}
+      {/* 01 — Trending / featured */}
       <section className="py-16 lg:py-20">
         <Container>
-          <SectionLabel index={2}>Most rented this month</SectionLabel>
+          <SectionLabel index={1}>Most rented this month</SectionLabel>
 
           <div className="mt-8 flex flex-wrap items-end justify-between gap-x-12 gap-y-6">
             <DisplayHeading
@@ -114,6 +112,9 @@ export default function HomePage() {
           <ProductGrid products={featured} className="mt-14" priorityCount={3} />
         </Container>
       </section>
+
+      {/* 02 — Categories */}
+      <CategoryGrid />
 
       {/* 03 — the Encone Care handover */}
       <HomeCareBand />
