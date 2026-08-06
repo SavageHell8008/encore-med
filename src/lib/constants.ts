@@ -30,7 +30,7 @@ export const BRAND = {
 } as const;
 
 export const SITE_URL = (
-  process.env.NEXT_PUBLIC_SITE_URL ?? "https://enconecare.in"
+  process.env.NEXT_PUBLIC_SITE_URL ?? "https://www.enconemed.com"
 ).replace(/\/$/, "");
 
 /**

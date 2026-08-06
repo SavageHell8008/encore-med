@@ -20,9 +20,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
   const products = getAllProducts();
 
   const newestProductChange = products
-    .map((p) => p.updatedAt)
-    .sort()
-    .at(-1);
+    .map((p) => new Date(p.updatedAt))
+    .sort((a, b) => b.getTime() - a.getTime())[0];
 
   const staticRoutes: MetadataRoute.Sitemap = [
     { url: `${SITE_URL}/`, lastModified: newestProductChange },
@@ -41,18 +40,17 @@ export default function sitemap(): MetadataRoute.Sitemap {
   const categoryRoutes: MetadataRoute.Sitemap = CATEGORIES.map((category) => {
     const latest = products
       .filter((p) => p.categorySlug === category.slug)
-      .map((p) => p.updatedAt)
-      .sort()
-      .at(-1);
+      .map((p) => new Date(p.updatedAt))
+      .sort((a, b) => b.getTime() - a.getTime())[0];
     return {
       url: `${SITE_URL}/categories/${category.slug}`,
-      lastModified: latest,
+      lastModified: latest ?? newestProductChange,
     };
   });
 
   const productRoutes: MetadataRoute.Sitemap = products.map((product) => ({
     url: `${SITE_URL}/products/${product.slug}`,
-    lastModified: product.updatedAt,
+    lastModified: new Date(product.updatedAt),
   }));
 
   const locationRoutes: MetadataRoute.Sitemap = LIVE_SERVICE_AREAS.map((area) => ({
