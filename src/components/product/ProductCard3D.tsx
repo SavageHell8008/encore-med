@@ -23,7 +23,7 @@ const BADGE_META: Record<string, { label: string; className: string; icon?: Luci
 /**
  * Product card with a pointer-tracked 3D tilt.
  *
- * There is no "Add to cart" here by design — Encore Care is an inventory-model
+ * There is no "Add to cart" here by design — Encone Care is an inventory-model
  * lead-gen business, not a marketplace (`01-business-understanding.md`). The
  * single action under the card takes the visitor to the product page, where
  * specs, safety information and the quote form live together.
@@ -172,7 +172,7 @@ export function ProductCard3D({ product, priority = false }: { product: Product;
             </Link>
 
             <a
-              href={whatsappLink(`Hi Encore Care, I want to buy ${product.name}. Please share price & details.`)}
+              href={whatsappLink(`Hi Encone Care, I want to buy ${product.name}. Please share price & details.`)}
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center justify-center gap-1.5 rounded-xl border border-brand-mint/50 bg-brand-mint/10 px-3 py-2.5 text-xs font-semibold sm:text-sm text-brand-mint transition-all duration-200 hover:bg-brand-mint hover:text-white"

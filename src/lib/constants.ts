@@ -8,40 +8,40 @@
  * The build brief spells the brand "EconeMed" on econemedical.in. The research
  * corpus and the parent company both point to "EnconeMed" (Encone Care + Med).
  * `05-geo.md` requires byte-identical entity naming across site, GBP, schema
- * and directories. Defaulting to "Encore Care"; change BRAND.name here only.
+ * and directories. Defaulting to "Encone Care"; change BRAND.name here only.
  */
 
 export const BRAND = {
   /** Public-facing brand name. Must match GBP, schema and directories exactly. */
-  name: "Encore Care",
+  name: "Encone Care",
   /** Verified: legal entity name. */
-  legalName: "Encore Care Nurse Private Limited",
+  legalName: "Encone Care Nurse Private Limited",
   parent: {
-    name: "Encore Care",
-    url: "https://encorecare.in",
+    name: "Encone Care",
+    url: "https://enconecare.in",
     /** Verified: parent's own hero tagline. */
     tagline: "Your Health, Our Priority",
   },
   tagline: "Your Health, Our Priority",
   description:
     "Rent or buy certified medical equipment — hospital beds, oxygen concentrators, BiPAP and complete home ICU setups — with published pricing, documented sanitisation and expert installation across Delhi.",
-  /** Verified: "since 2022" on encorecare.in. */
+  /** Verified: "since 2022" on enconecare.in. */
   operatingSince: 2022,
 } as const;
 
 export const SITE_URL = (
-  process.env.NEXT_PUBLIC_SITE_URL ?? "https://encorecare.in"
+  process.env.NEXT_PUBLIC_SITE_URL ?? "https://enconecare.in"
 ).replace(/\/$/, "");
 
 /**
  * Contact details.
  *
- * Phone numbers and the registered address are verified from encorecare.in.
+ * Phone numbers and the registered address are verified from enconecare.in.
  * The email is a placeholder — the parent site exposes no address publicly, so
  * it must be confirmed before launch rather than guessed at.
  */
 export const CONTACT = {
-  /** Verified: +91 888 769 9109 (primary line on encorecare.in). */
+  /** Verified: +91 888 769 9109 (primary line on enconecare.in). */
   phone: process.env.NEXT_PUBLIC_PHONE ?? "+918887699109",
   phoneDisplay: process.env.NEXT_PUBLIC_PHONE_DISPLAY ?? "+91 88876 99109",
   /** Verified: second published line. */
@@ -49,7 +49,7 @@ export const CONTACT = {
   phoneAltDisplay: process.env.NEXT_PUBLIC_PHONE_ALT_DISPLAY ?? "+91 89208 13780",
   whatsapp: process.env.NEXT_PUBLIC_WHATSAPP ?? "918887699109",
   /** ⚠️ Placeholder — confirm the real inbox. */
-  email: process.env.NEXT_PUBLIC_EMAIL ?? "care@encorecare.in",
+  email: process.env.NEXT_PUBLIC_EMAIL ?? "care@enconecare.in",
   /** ⚠️ Placeholder — Companies Act s.12(3)(c). Leave blank rather than invent. */
   cin: process.env.NEXT_PUBLIC_CIN ?? "",
   /** Verified: S-548 School Block, Shakarpur Delhi, 110092 India. */
@@ -64,12 +64,12 @@ export const CONTACT = {
   hours: "Open 24×7 — equipment delivery 8:00 AM – 10:00 PM IST",
   social: {
     facebook: "https://www.facebook.com/profile.php?id=100083129450615",
-    instagram: "https://www.instagram.com/encorecarenursing",
+    instagram: "https://www.instagram.com/enconecarenursing",
   },
 } as const;
 
 /**
- * Verified operating figures from encorecare.in. Specific, checkable numbers
+ * Verified operating figures from enconecare.in. Specific, checkable numbers
  * build credibility where vague superlatives erode it (`09-trust-psychology.md`),
  * so nothing here is rounded up or embellished.
  */
@@ -99,9 +99,9 @@ export type ServiceArea = {
   name: string;
   region: string;
   /**
-   * `live`         — Encore Care delivers and installs equipment here today.
-   * `care-network` — Encore Care's nursing network operates here (verified from
-   *                  encorecare.in), and equipment can be arranged on request,
+   * `live`         — Encone Care delivers and installs equipment here today.
+   * `care-network` — Encone Care's nursing network operates here (verified from
+   *                  enconecare.in), and equipment can be arranged on request,
    *                  but same-day equipment delivery is not yet promised.
    */
   status: "live" | "care-network";
@@ -137,14 +137,14 @@ export const CARE_NETWORK_AREAS = SERVICE_AREAS.filter((a) => a.status === "care
 export const CITY_OPTIONS = SERVICE_AREAS.map((a) => a.name);
 
 /* -------------------------------------------------------------------------- */
-/*  Encore Care services (verified from encorecare.in)                        */
+/*  Encone Care services (verified from enconecare.in)                        */
 /* -------------------------------------------------------------------------- */
 
 export type CareService = {
   slug: string;
   name: string;
   description: string;
-  /** Path on encorecare.in, not on this site. */
+  /** Path on enconecare.in, not on this site. */
   href: string;
 };
 
@@ -163,68 +163,68 @@ export const CARE_SERVICES: CareService[] = [
     name: "Nursing Staff",
     description:
       "Trained male & female staff nurses providing professional nursing care for 12/24 hour home care shifts across Delhi NCR.",
-    href: "https://encorecare.in/services/nursing-staff",
+    href: "https://enconecare.in/services/nursing-staff",
   },
   {
     slug: "attendants",
     name: "Patient Attendants",
     description:
       "Dedicated attendants and professional caregivers providing in-home care — daily care, mobility assistance, and companionship.",
-    href: "https://encorecare.in/services/attendants",
+    href: "https://enconecare.in/services/attendants",
   },
   {
     slug: "elder-care",
     name: "Elder Care",
     description:
       "Compassionate senior citizen care, elderly care and personal home care — daily care, companionship & monitoring.",
-    href: "https://encorecare.in/services/elder-care",
+    href: "https://enconecare.in/services/elder-care",
   },
   {
     slug: "baby-care",
     name: "Mother & Baby Care",
     description:
       "Experienced nannies and babysitters for newborns, infants, and toddlers — safe, nurturing child care at home.",
-    href: "https://encorecare.in/services/baby-care",
+    href: "https://enconecare.in/services/baby-care",
   },
   {
     slug: "specialized-care",
     name: "Specialised Care",
     description:
       "Expert neurological care and disability care for paralysis, bedridden patients & complex conditions.",
-    href: "https://encorecare.in/services/specialized-care",
+    href: "https://enconecare.in/services/specialized-care",
   },
   {
     slug: "post-operative-care",
     name: "Post-Operative Care",
     description:
       "Trained nurses for orthopaedic care, dressing care, medication & recovery support after surgery.",
-    href: "https://encorecare.in/services/post-operative-care",
+    href: "https://enconecare.in/services/post-operative-care",
   },
   {
     slug: "physiotherapy",
     name: "Physiotherapy",
     description:
       "Qualified physiotherapists for home rehabilitation, pain management, and walking assistance.",
-    href: "https://encorecare.in/services/physiotherapy",
+    href: "https://enconecare.in/services/physiotherapy",
   },
   {
     slug: "doctor-visit",
     name: "Doctor Visit",
     description:
       "Experienced doctors for a doctor visit at home — consultations, diagnosis & treatment.",
-    href: "https://encorecare.in/services/doctor-visit",
+    href: "https://enconecare.in/services/doctor-visit",
   },
   {
     slug: "injection-visit",
     name: "Injection Visit",
     description: "Qualified nurses for safe, hygienic home injection visits.",
-    href: "https://encorecare.in/services/injection-visit",
+    href: "https://enconecare.in/services/injection-visit",
   },
   {
     slug: "sleep-study",
     name: "Sleep Study",
     description: "Home sleep study tests to diagnose sleep apnoea and disorders.",
-    href: "https://encorecare.in/services/sleep-study",
+    href: "https://enconecare.in/services/sleep-study",
   },
 ];
 
@@ -234,11 +234,11 @@ export const CARE_SERVICES: CareService[] = [
  * are the bridge from "my father had a stroke" to the right equipment.
  */
 export const CARE_CONDITIONS = [
-  { name: "Dementia & Alzheimer's care", href: "https://encorecare.in/conditions/dementia-alzheimers-care" },
-  { name: "Post-stroke rehabilitation", href: "https://encorecare.in/conditions/post-stroke-rehab" },
-  { name: "Parkinson's patient care", href: "https://encorecare.in/conditions/parkinsons-patient-care" },
-  { name: "Cancer patient care at home", href: "https://encorecare.in/conditions/cancer-patient-care-at-home" },
-  { name: "Paralysis patient care", href: "https://encorecare.in/conditions/paralysis-care" },
+  { name: "Dementia & Alzheimer's care", href: "https://enconecare.in/conditions/dementia-alzheimers-care" },
+  { name: "Post-stroke rehabilitation", href: "https://enconecare.in/conditions/post-stroke-rehab" },
+  { name: "Parkinson's patient care", href: "https://enconecare.in/conditions/parkinsons-patient-care" },
+  { name: "Cancer patient care at home", href: "https://enconecare.in/conditions/cancer-patient-care-at-home" },
+  { name: "Paralysis patient care", href: "https://enconecare.in/conditions/paralysis-care" },
 ] as const;
 
 /* -------------------------------------------------------------------------- */
@@ -251,7 +251,7 @@ export const CARE_CONDITIONS = [
  * "marketplace" — this is structurally an inventory-model business under the
  * Consumer Protection E-Commerce Rules, 2020.
  *
- * Every claim below is about Encore Care's own process, which it can verify.
+ * Every claim below is about Encone Care's own process, which it can verify.
  */
 export const TRUST_PILLARS = [
   {
@@ -275,7 +275,7 @@ export const TRUST_PILLARS = [
   {
     id: "support",
     title: "Nurses on the other end of the same number",
-    body: "Encore Care's 100+ verified nurses and attendants cover the same cities. Equipment and the person who knows how to use it come from one call.",
+    body: "Encone Care's 100+ verified nurses and attendants cover the same cities. Equipment and the person who knows how to use it come from one call.",
     icon: "headset",
   },
 ] as const;
@@ -314,21 +314,21 @@ export const FOOTER_LINKS = {
     title: "Home Care",
     links: [
       { href: "/home-care", label: "All care services" },
-      { href: "https://encorecare.in/services/nursing-staff", label: "Nursing Staff" },
-      { href: "https://encorecare.in/services/elder-care", label: "Elder Care" },
-      { href: "https://encorecare.in/services/physiotherapy", label: "Physiotherapy" },
-      { href: "https://encorecare.in/services/post-operative-care", label: "Post-Operative Care" },
-      { href: "https://encorecare.in/caretakers", label: "Our Caretakers" },
+      { href: "https://enconecare.in/services/nursing-staff", label: "Nursing Staff" },
+      { href: "https://enconecare.in/services/elder-care", label: "Elder Care" },
+      { href: "https://enconecare.in/services/physiotherapy", label: "Physiotherapy" },
+      { href: "https://enconecare.in/services/post-operative-care", label: "Post-Operative Care" },
+      { href: "https://enconecare.in/caretakers", label: "Our Caretakers" },
     ],
   },
   company: {
     title: "Company",
     links: [
-      { href: "/about", label: "About Encore Care" },
+      { href: "/about", label: "About Encone Care" },
       { href: "/certifications", label: "Quality & Sanitisation" },
       { href: "/contact", label: "Contact" },
-      { href: "https://encorecare.in/verification-process", label: "Verification Process" },
-      { href: "https://encorecare.in/faq", label: "FAQ" },
+      { href: "https://enconecare.in/verification-process", label: "Verification Process" },
+      { href: "https://enconecare.in/faq", label: "FAQ" },
     ],
   },
   legal: {
@@ -337,7 +337,7 @@ export const FOOTER_LINKS = {
       { href: "/privacy", label: "Privacy Policy" },
       { href: "/terms", label: "Terms of Service" },
       { href: "/refund-policy", label: "Refund & Return Policy" },
-      { href: "https://encorecare.in/editorial-policy", label: "Editorial Policy" },
+      { href: "https://enconecare.in/editorial-policy", label: "Editorial Policy" },
     ],
   },
 } as const;

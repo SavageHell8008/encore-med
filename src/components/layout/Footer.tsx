@@ -128,7 +128,7 @@ export function Footer() {
                 href={CONTACT.social.facebook}
                 target="_blank"
                 rel="noopener noreferrer"
-                aria-label="Encore Care on Facebook"
+                aria-label="Encone Care on Facebook"
                 className="grid h-9 w-9 place-items-center rounded-lg border border-line-strong text-text-muted transition-all hover:border-brand-green/50 hover:text-brand-green"
               >
                 <FacebookMark className="h-4 w-4" />
@@ -137,7 +137,7 @@ export function Footer() {
                 href={CONTACT.social.instagram}
                 target="_blank"
                 rel="noopener noreferrer"
-                aria-label="Encore Care on Instagram"
+                aria-label="Encone Care on Instagram"
                 className="grid h-9 w-9 place-items-center rounded-lg border border-line-strong text-text-muted transition-all hover:border-brand-green/50 hover:text-brand-green"
               >
                 <InstagramMark className="h-4 w-4" />
@@ -182,7 +182,7 @@ export function Footer() {
             ))}
           </p>
           <p className="mt-2.5 text-sm leading-relaxed text-text-muted">
-            <span className="text-text-secondary">Encore Care network: </span>
+            <span className="text-text-secondary">Encone Care network: </span>
             {CARE_NETWORK_AREAS.map((a) => a.name).join(", ")} — nursing on the
             ground, equipment on request.
           </p>

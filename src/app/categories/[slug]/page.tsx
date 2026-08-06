@@ -58,7 +58,7 @@ export default async function CategoryPage({ params }: { params: Params }) {
   const faqs: Faq[] = [
     {
       question: `Where can I rent ${category.name.toLowerCase()} in Delhi?`,
-      answer: `Encore Care supplies ${category.name.toLowerCase()} on rent and for sale across ${LIVE_SERVICE_AREAS.map((a) => a.name).join(" and ")}, delivered and installed by a technician usually within four hours of a confirmed order.`,
+      answer: `Encone Care supplies ${category.name.toLowerCase()} on rent and for sale across ${LIVE_SERVICE_AREAS.map((a) => a.name).join(" and ")}, delivered and installed by a technician usually within four hours of a confirmed order.`,
     },
     {
       question: `How much do ${category.name.toLowerCase()} cost?`,

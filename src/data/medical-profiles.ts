@@ -15,11 +15,11 @@ import type { MedicalProfile } from "@/lib/types";
  */
 
 const CDSCO_A =
-  "Classified Class A (low risk) under India's Medical Devices Rules, 2017. CDSCO classifies devices and licenses manufacturers and importers; it does not license rental or resale providers, and Encore Care makes no claim of CDSCO approval.";
+  "Classified Class A (low risk) under India's Medical Devices Rules, 2017. CDSCO classifies devices and licenses manufacturers and importers; it does not license rental or resale providers, and Encone Care makes no claim of CDSCO approval.";
 const CDSCO_B =
-  "Classified Class B (low–moderate risk) under India's Medical Devices Rules, 2017. CDSCO does not license rental or resale providers and Encore Care claims no CDSCO approval.";
+  "Classified Class B (low–moderate risk) under India's Medical Devices Rules, 2017. CDSCO does not license rental or resale providers and Encone Care claims no CDSCO approval.";
 const CDSCO_C =
-  "Classified Class C (moderate–high risk) under India's Medical Devices Rules, 2017. CDSCO does not license rental or resale providers and Encore Care claims no CDSCO approval.";
+  "Classified Class C (moderate–high risk) under India's Medical Devices Rules, 2017. CDSCO does not license rental or resale providers and Encone Care claims no CDSCO approval.";
 
 export const PROFILES = {
   /* ---------------------------------------------------------------- beds -- */
@@ -452,7 +452,7 @@ export const PROFILES = {
     ],
     specialties: ["Nursing", "Geriatric"],
     legalStatus:
-      "Hospital furniture is generally outside the device classification of India's Medical Devices Rules, 2017, and is supplied as general-purpose care furniture. Encore Care claims no CDSCO approval.",
+      "Hospital furniture is generally outside the device classification of India's Medical Devices Rules, 2017, and is supplied as general-purpose care furniture. Encone Care claims no CDSCO approval.",
   },
 
   /* ----------------------------------------------------------- ICU kit -- */
@@ -516,7 +516,7 @@ export const PROFILES = {
     ],
     specialties: ["Nursing", "Pulmonary", "Emergency", "Neurologic"],
     legalStatus:
-      "Supplied as a package of individually classified devices under India's Medical Devices Rules, 2017, spanning Class A to Class C; each component carries its own classification. The package itself is a coordination and commissioning service and holds no separate device classification. Encore Care claims no CDSCO approval.",
+      "Supplied as a package of individually classified devices under India's Medical Devices Rules, 2017, spanning Class A to Class C; each component carries its own classification. The package itself is a coordination and commissioning service and holds no separate device classification. Encone Care claims no CDSCO approval.",
   },
   /* ------------------------------------------------- urinary catheter -- */
   urinaryCatheter: {
@@ -568,7 +568,7 @@ export const PROFILES = {
     ],
     specialties: ["Urologic", "Nursing", "Geriatric"],
     legalStatus:
-      "Urinary catheters are notified medical devices under India's Medical Devices Rules, 2017, and are supplied sterile and single-use. Encore Care supplies them and makes no claim of CDSCO approval.",
+      "Urinary catheters are notified medical devices under India's Medical Devices Rules, 2017, and are supplied sterile and single-use. Encone Care supplies them and makes no claim of CDSCO approval.",
   },
 
   /* ------------------------------------------------- enteral feeding -- */
@@ -622,7 +622,7 @@ export const PROFILES = {
     ],
     specialties: ["Nursing", "Gastroenterologic", "Geriatric"],
     legalStatus:
-      "Enteral feeding tubes are notified medical devices under India's Medical Devices Rules, 2017, supplied sterile and single-use. Encore Care claims no CDSCO approval.",
+      "Enteral feeding tubes are notified medical devices under India's Medical Devices Rules, 2017, supplied sterile and single-use. Encone Care claims no CDSCO approval.",
   },
 
   /* ----------------------------------------------------------- PPE -- */
@@ -662,7 +662,7 @@ export const PROFILES = {
     ],
     specialties: ["Nursing", "PublicHealth"],
     legalStatus:
-      "Examination gloves and face masks are notified medical devices under India's Medical Devices Rules, 2017. Supplied as single-use items; Encore Care claims no CDSCO approval.",
+      "Examination gloves and face masks are notified medical devices under India's Medical Devices Rules, 2017. Supplied as single-use items; Encone Care claims no CDSCO approval.",
   },
 
   /* -------------------------------------------------- incontinence -- */

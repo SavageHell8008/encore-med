@@ -3,7 +3,7 @@ import { buildMetadata } from "@/lib/seo";
 
 export const metadata = buildMetadata({
   title: "Privacy Policy",
-  description: "How Encore Care handles the personal information you share when enquiring about medical equipment.",
+  description: "How Encone Care handles the personal information you share when enquiring about medical equipment.",
   path: "/privacy",
   // Thin until the real content lands — kept out of the index rather than
   // shipped as a placeholder Google can score the whole site down for.

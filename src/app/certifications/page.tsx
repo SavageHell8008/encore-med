@@ -10,7 +10,7 @@ import type { Faq } from "@/lib/types";
 export const metadata = buildMetadata({
   title: "Quality & Sanitisation Process",
   description:
-    "How Encore Care cleans, disinfects and inspects rental equipment between patients — the full process, step by step, with the certifications we do and do not hold stated plainly.",
+    "How Encone Care cleans, disinfects and inspects rental equipment between patients — the full process, step by step, with the certifications we do and do not hold stated plainly.",
   path: "/certifications",
 });
 
@@ -49,7 +49,7 @@ const STEPS = [
 
 const FAQS: Faq[] = [
   {
-    question: "Is Encore Care ISO 13485 certified?",
+    question: "Is Encone Care ISO 13485 certified?",
     answer:
       "No, and we will not imply otherwise. ISO 13485 is a quality management standard for organisations that manufacture medical devices; it is not a certification a rental operator normally holds. What we do is follow each manufacturer's own published reprocessing instructions for cleaning and disinfection, and document each step on a checklist you receive at delivery.",
   },

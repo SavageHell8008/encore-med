@@ -44,7 +44,7 @@ export default function OpengraphImage() {
             <div style={{ width: 22, height: 22, borderRadius: 5, background: "#047857" }} />
           </div>
           <div style={{ display: "flex", fontSize: 36, fontWeight: 700 }}>
-            <span style={{ color: "#0B1F17" }}>Encore </span>
+            <span style={{ color: "#0B1F17" }}>Encone </span>
             <span style={{ color: "#047857" }}>Care</span>
           </div>
         </div>

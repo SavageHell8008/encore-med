@@ -32,7 +32,7 @@ const HOME_FAQS: Faq[] = [
   {
     question: "Where can I rent medical equipment in Delhi?",
     answer:
-      "Encore Care rents and sells medical equipment across Delhi and New Delhi, delivered and installed in under four hours. The catalogue covers hospital beds, oxygen concentrators, BiPAP and CPAP machines, wheelchairs, patient monitors and complete home ICU setups.",
+      "Encone Care rents and sells medical equipment across Delhi and New Delhi, delivered and installed in under four hours. The catalogue covers hospital beds, oxygen concentrators, BiPAP and CPAP machines, wheelchairs, patient monitors and complete home ICU setups.",
   },
   {
     question: "Is it cheaper to rent or buy medical equipment?",
@@ -52,7 +52,7 @@ const HOME_FAQS: Faq[] = [
   {
     question: "Can you provide a nurse along with the equipment?",
     answer:
-      "Yes. Encore Care is a home nursing and medical equipment service operating since 2022 with over 100 verified nurses and attendants across Delhi NCR, Lucknow, Kanpur, Prayagraj and Varanasi. Equipment and trained care can be arranged on the same call.",
+      "Yes. Encone Care is a home nursing and medical equipment service operating since 2022 with over 100 verified nurses and attendants across Delhi NCR, Lucknow, Kanpur, Prayagraj and Varanasi. Equipment and trained care can be arranged on the same call.",
   },
   {
     question: "Do I need a prescription to rent an oxygen concentrator or BiPAP machine?",
@@ -139,7 +139,7 @@ export default function HomePage() {
               <p className="text-base leading-relaxed text-text-secondary">
                 We deliver equipment where we can install it, demonstrate it, and
                 get a replacement out the same night if it fails. Today that is
-                Delhi. Everywhere else, Encore Care&apos;s nursing network is
+                Delhi. Everywhere else, Encone Care&apos;s nursing network is
                 already on the ground and equipment is arranged on request — we
                 would rather tell you that than take a booking we cannot keep.
               </p>
@@ -169,7 +169,7 @@ export default function HomePage() {
 
               <div className="mt-10 border-t border-line pt-8">
                 <h3 className="text-[11px] font-semibold uppercase tracking-[0.2em] text-text-muted">
-                  Encore Care network — equipment on request
+                  Encone Care network — equipment on request
                 </h3>
                 <ul className="mt-5 flex flex-wrap gap-2">
                   {CARE_NETWORK_AREAS.map((area) => (

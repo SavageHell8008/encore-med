@@ -1,5 +1,5 @@
 /**
- * Domain types for the Encore Care catalogue.
+ * Domain types for the Encone Care catalogue.
  *
  * Modelling notes drawn from Phase 0 research:
  * - Rent and buy are a per-product *attribute pair*, not separate site sections
@@ -167,7 +167,7 @@ export type Product = {
   indications: string[];
   /** Who this is appropriate for. */
   audience: string[];
-  /** Brands Encore Care actually stocks for this item. */
+  /** Brands Encone Care actually stocks for this item. */
   brandsAvailable: string[];
 
   specifications: SpecRow[];

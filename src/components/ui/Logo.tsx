@@ -3,7 +3,7 @@ import { cn } from "@/lib/utils";
 import { BRAND } from "@/lib/constants";
 
 /**
- * The Encore Care mark plus wordmark.
+ * The Encone Care mark plus wordmark.
  *
  * `/logo.svg` is a vector wrapper around a raster image rather than true paths,
  * which is why it is ~140 KB and why it is rendered at a fixed small size and
@@ -13,7 +13,7 @@ import { BRAND } from "@/lib/constants";
  *
  * The mark is decorative here because the wordmark beside it already carries
  * the brand name as text; giving both the same accessible name would make a
- * screen reader announce "Encore Care Encore Care".
+ * screen reader announce "Encone Care Encone Care".
  */
 export function Logo({
   className,
@@ -38,9 +38,14 @@ export function Logo({
         className="rounded-full"
       />
       {showWordmark && (
-        <span className="font-display text-lg uppercase tracking-tight">
-          <span className="text-text-primary">Encore </span>
-          <span className="text-brand-green">Care</span>
+        <span className="flex flex-col leading-none">
+          <span className="font-display text-lg uppercase tracking-tight">
+            <span className="text-text-primary">Encone </span>
+            <span className="text-brand-green">Care</span>
+          </span>
+          <span className="text-[10px] font-medium tracking-wider text-text-muted mt-0.5">
+            Your Health, Our Priority
+          </span>
         </span>
       )}
     </span>

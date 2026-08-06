@@ -164,7 +164,7 @@ export default async function ProductPage({ params }: { params: Params }) {
                 </p>
                 <div className="mt-4 pt-3 border-t border-brand-green/20">
                   <a
-                    href={whatsappLink(`Hi Encore Care, I want to buy ${product.name}. Please share price & details.`)}
+                    href={whatsappLink(`Hi Encone Care, I want to buy ${product.name}. Please share price & details.`)}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="inline-flex items-center gap-2 rounded-xl border border-brand-mint/50 bg-brand-mint/10 px-4 py-2.5 text-sm font-semibold text-brand-mint transition-all hover:bg-brand-mint hover:text-white"

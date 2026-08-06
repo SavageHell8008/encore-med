@@ -77,7 +77,7 @@ export const CARE_ESSENTIALS: CareEssential[] = [
       { label: "Supplied", value: "Sterile, individually wrapped, single-use" },
     ],
     usage: [
-      "Placed by a trained nurse under aseptic technique — Encore Care can send one.",
+      "Placed by a trained nurse under aseptic technique — Encone Care can send one.",
       "Never inflate the balloon until urine is actually flowing.",
       "The drainage bag stays below bladder level at all times, including during transfers.",
       "Meatal hygiene daily with soap and water. No antiseptics unless a clinician says so.",
@@ -95,7 +95,7 @@ export const CARE_ESSENTIALS: CareEssential[] = [
     relatedProductSlugs: ["hospital-bed", "icu-setup-at-home"],
     faqs: [
       { question: "How often should a Foley catheter be changed?", answer: "On the treating clinician's schedule — commonly every two to four weeks for silicone, sooner if blocked or infected. Not when it looks discoloured, which is normal and not a reason to change." },
-      { question: "Can a family member insert a Foley catheter?", answer: "No. It is a sterile clinical procedure and untrained insertion causes urethral trauma, false passages and infection. Encore Care can send a nurse to place it and to change it." },
+      { question: "Can a family member insert a Foley catheter?", answer: "No. It is a sterile clinical procedure and untrained insertion causes urethral trauma, false passages and infection. Encone Care can send a nurse to place it and to change it." },
       { question: "What size Foley catheter is needed?", answer: "The smallest that drains adequately — commonly 14 or 16 Fr for adults. This is a clinical decision; a larger catheter causes more trauma and does not reduce leakage." },
     ],
     updatedAt: UPDATED,
@@ -216,7 +216,7 @@ export const CARE_ESSENTIALS: CareEssential[] = [
       // The `suction` family's legalStatus describes the machine. A catheter is
       // a separate, lower-class notified device, so it states its own.
       legalStatus:
-        "Suction catheters are notified medical devices under India's Medical Devices Rules, 2017, supplied sterile and single-use. CDSCO does not license resale providers and Encore Care claims no CDSCO approval.",
+        "Suction catheters are notified medical devices under India's Medical Devices Rules, 2017, supplied sterile and single-use. CDSCO does not license resale providers and Encone Care claims no CDSCO approval.",
       contraindications: [
         {
           name: "Reuse of a single-use catheter",
