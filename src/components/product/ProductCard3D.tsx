@@ -22,7 +22,7 @@ const BADGE_META: Record<string, { label: string; className: string; icon?: Luci
 /**
  * Product card with a pointer-tracked 3D tilt.
  *
- * There is no "Add to cart" here by design — EnconeMed is an inventory-model
+ * There is no "Add to cart" here by design — Encore Care is an inventory-model
  * lead-gen business, not a marketplace (`01-business-understanding.md`). The
  * single action under the card takes the visitor to the product page, where
  * specs, safety information and the quote form live together.

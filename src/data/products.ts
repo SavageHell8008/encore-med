@@ -2,7 +2,7 @@ import { profile } from "@/data/medical-profiles";
 import type { Product, ProductImage } from "@/lib/types";
 
 /**
- * The EnconeMed catalogue.
+ * The Encore Care catalogue.
  *
  * Two sources of truth sit behind this file:
  *  - `public/Equipment/rental`  — stocked for rental; these can also be bought.
@@ -19,12 +19,12 @@ import type { Product, ProductImage } from "@/lib/types";
  * let them drift apart.
  */
 
-/** Source photographs are square 300×300, so cards and galleries letterbox
+/** Source photographs are square 800×800, so cards and galleries letterbox
  *  rather than crop — `object-contain`, not `object-cover`. */
-const SQUARE = { width: 300, height: 300 } as const;
+const SQUARE = { width: 800, height: 800 } as const;
 
 function img(
-  folder: "rental" | "for-sale",
+  folder: string,
   file: string,
   alt: string,
   kind: ProductImage["kind"] = "hero",
@@ -36,8 +36,8 @@ function img(
 const DELHI = [{ city: "delhi", sameDay: true }, { city: "new-delhi", sameDay: true }];
 
 const REVIEWER = {
-  name: "Encone Care clinical team",
-  credentials: "GNM/B.Sc. nursing leads, Encone Care Private Limited",
+  name: "Encore Care clinical team",
+  credentials: "GNM/B.Sc. nursing leads, Encore Care Nurse Private Limited",
   date: "2026-08-06",
 };
 
@@ -341,7 +341,7 @@ export const PRODUCTS: Product[] = [
     ],
     faqs: [
       { question: "What is the difference between BiPAP and CPAP?", answer: "CPAP holds one constant pressure. BiPAP uses a higher pressure to breathe in and a lower one to breathe out, which makes it tolerable at higher pressures and lets it help patients who struggle to exhale — COPD, obesity hypoventilation, neuromuscular weakness. CPAP is usually first-line for straightforward obstructive sleep apnoea." },
-      { question: "Do I need a sleep study before renting a BiPAP machine?", answer: "You need clinician-set pressures, which normally come from a sleep study or a blood gas assessment. Encone Care runs home sleep studies if you do not have one yet." },
+      { question: "Do I need a sleep study before renting a BiPAP machine?", answer: "You need clinician-set pressures, which normally come from a sleep study or a blood gas assessment. Encore Care runs home sleep studies if you do not have one yet." },
       { question: "Can I rent a BiPAP machine to try it first?", answer: "Yes, and it is a sensible way to start — tolerance varies a lot between patients, and rental lets you find out before buying. Call us for a quote covering the trial period." },
       { question: "How often do the mask and filters need replacing?", answer: "Mask cushions roughly every three months, filters roughly monthly. Both are ordinary consumables and both are cheap relative to the cost of therapy failing because of a leak." },
     ],
@@ -733,7 +733,7 @@ export const PRODUCTS: Product[] = [
     ],
     dimensions: { extra: [{ label: "Room required", value: "Minimum 3.0 m × 2.5 m with access on both sides of the bed" }, { label: "Power required", value: "Two 16 A sockets on separate circuits, plus an inverter rated for a continuous 1.5 kW load" }] },
     alsoKnowAbout: [
-      { label: "Equipment is the smaller half", value: "A home ICU without trained hands present is not a home ICU. Encone Care provides the nursing; if you have not arranged it, arrange it before the equipment arrives." },
+      { label: "Equipment is the smaller half", value: "A home ICU without trained hands present is not a home ICU. Encore Care provides the nursing; if you have not arranged it, arrange it before the equipment arrives." },
       { label: "Power backup is not optional", value: "Concentrator, monitor and suction all stop when mains power fails. For a dependent patient that is an emergency, and a domestic inverter is usually undersized for the load." },
       { label: "No ventilator in this package", value: "Invasive ventilation requires separate clinical assessment and a respiratory therapist handover. Ask us and we will arrange it as a separate line." },
       { label: "Alarm limits get set once, then revisited", value: "The numbers configured at installation reflect the patient's condition that day. When the condition changes, the limits need changing with it." },
@@ -1360,7 +1360,7 @@ export const PRODUCTS: Product[] = [
     dimensions: { width: "215 mm", height: "140 mm", length: "125 mm", weight: "Approximately 2.2 kg" },
     alsoKnowAbout: [
       { label: "Sale only", value: "The rental fleet carries the DVT pump. Infusion and syringe pumps are supplied for purchase." },
-      { label: "It needs a trained nurse", value: "Priming, loading and rate-setting are clinical tasks. This is not equipment a family operates on its own, and Encone Care can supply the nursing alongside it." },
+      { label: "It needs a trained nurse", value: "Priming, loading and rate-setting are clinical tasks. This is not equipment a family operates on its own, and Encore Care can supply the nursing alongside it." },
       { label: "Watch the site, not just the pump", value: "The pump will keep infusing into tissue as happily as into a vein. Swelling, coolness or pain at the cannula site needs acting on regardless of what the screen says." },
       { label: "Giving sets are single-use", value: "Reusing a giving set is an infection route straight into the bloodstream. They are consumables and are changed on schedule." },
     ],

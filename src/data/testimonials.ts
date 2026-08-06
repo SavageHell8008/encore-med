@@ -16,7 +16,7 @@ export type Testimonial = {
  * testimonials attributed to named people and facilities is fabrication, and in
  * a healthcare context it is the fastest way to lose the trust the rest of this
  * site is built to earn. `20-competitor-ux-analysis.md` identifies genuine,
- * dated, verifiable testimonials as one of EnconeMed's strongest available
+ * dated, verifiable testimonials as one of Encore Care's strongest available
  * differentiators — which only works if they are genuine.
  *
  * The section is therefore gated: it renders only when

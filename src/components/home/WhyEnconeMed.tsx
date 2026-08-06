@@ -18,7 +18,7 @@ const ICONS: Record<string, LucideIcon> = {
  * `09-trust-psychology.md`: legitimacy and specificity come before social
  * proof, and vague superlatives ("India's most trusted") actively erode
  * credibility while specific checkable claims build it. Every line here is a
- * statement about EnconeMed's own process that a customer can verify on the
+ * statement about Encore Care's own process that a customer can verify on the
  * day of delivery — no borrowed certifications, no unverifiable counts.
  */
 export function WhyEnconeMed() {

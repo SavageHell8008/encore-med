@@ -8,7 +8,7 @@ import { generateMedicalBusinessSchema } from "@/lib/schema-generator";
 import { buildMetadata } from "@/lib/seo";
 
 export const metadata = buildMetadata({
-  title: "Contact EnconeMed — Delhi Medical Equipment",
+  title: "Contact Encore Care — Delhi Medical Equipment",
   description:
     "Call, WhatsApp or send your details and someone who knows the equipment will call back. Same-day delivery and setup across Delhi, 8 AM to 10 PM.",
   path: "/contact",

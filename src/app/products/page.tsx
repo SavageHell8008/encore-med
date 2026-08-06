@@ -28,7 +28,7 @@ export async function generateMetadata({ searchParams }: { searchParams: SearchP
   return buildMetadata({
     title: "All Medical Equipment — Rent or Buy in Delhi",
     description:
-      "Every item EnconeMed rents and sells in Delhi — hospital beds, oxygen, BiPAP, monitors, pumps and mobility. Filter by equipment type or by what the patient is struggling with, and ask for a quote.",
+      "Every item Encore Care rents and sells in Delhi — hospital beds, oxygen, BiPAP, monitors, pumps and mobility. Filter by equipment type or by what the patient is struggling with, and ask for a quote.",
     path: "/products",
     // Filtered permutations are thin duplicates of this page. They stay
     // crawlable (follow) so link equity flows to the products, but out of the
@@ -86,7 +86,7 @@ export default async function ProductsPage({ searchParams }: { searchParams: Sea
       <JsonLd
         schema={generateItemListSchema(
           products.map((p) => ({ name: p.name, href: `/products/${p.slug}` })),
-          "EnconeMed medical equipment",
+          "Encore Care medical equipment",
         )}
       />
 

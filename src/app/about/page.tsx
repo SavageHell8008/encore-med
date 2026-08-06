@@ -7,9 +7,9 @@ import { BRAND, TRUST_PILLARS } from "@/lib/constants";
 import { buildMetadata } from "@/lib/seo";
 
 export const metadata = buildMetadata({
-  title: "About EnconeMed — Medical Equipment in Delhi",
+  title: "About Encore Care — Medical Equipment in Delhi",
   description:
-    "EnconeMed rents and sells medical equipment across Delhi, owning its own fleet rather than listing other people's stock. Documented sanitisation, technician setup, honest quotes.",
+    "Encore Care rents and sells medical equipment across Delhi, owning its own fleet rather than listing other people's stock. Documented sanitisation, technician setup, honest quotes.",
   path: "/about",
 });
 

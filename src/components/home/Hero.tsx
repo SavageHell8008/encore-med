@@ -64,7 +64,7 @@ export function Hero() {
               className="mt-8 font-display text-[2.6rem] uppercase leading-[0.92] text-text-primary sm:text-6xl lg:text-[4.2rem]"
             >
               Medical equipment
-              <span className="block text-text-muted">for modern healthcare.</span>
+              <span className="block text-text-muted">Your Health, Our Priority</span>
             </motion.h1>
 
             <motion.p

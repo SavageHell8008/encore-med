@@ -3,7 +3,7 @@ import { buildMetadata } from "@/lib/seo";
 
 export const metadata = buildMetadata({
   title: "Terms of Service",
-  description: "The terms covering equipment rental and purchase from EnconeMed, currently under legal review.",
+  description: "The terms covering equipment rental and purchase from Encore Care, currently under legal review.",
   path: "/terms",
   // Thin until the real content lands — kept out of the index rather than
   // shipped as a placeholder Google can score the whole site down for.

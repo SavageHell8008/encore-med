@@ -59,7 +59,7 @@ export default async function LocationPage({ params }: { params: Params }) {
   const faqs: Faq[] = [
     {
       question: `Do you deliver medical equipment in ${area.name}?`,
-      answer: `Yes. EnconeMed delivers, installs and commissions equipment across ${area.name}, usually within four hours of a confirmed order. A technician assembles the equipment and demonstrates it before leaving.`,
+      answer: `Yes. Encore Care delivers, installs and commissions equipment across ${area.name}, usually within four hours of a confirmed order. A technician assembles the equipment and demonstrates it before leaving.`,
     },
     {
       question: `What does hospital bed rental cost in ${area.name}?`,
@@ -152,7 +152,7 @@ export default async function LocationPage({ params }: { params: Params }) {
             {SERVICE_AREAS.filter((a) => a.status === "care-network")
               .map((a) => a.name)
               .join(", ")}
-            , Encone Care&apos;s nursing network is already on the ground and
+            , Encore Care&apos;s nursing network is already on the ground and
             equipment is arranged on request. Call us and we will tell you
             honestly whether we can reach you rather than take the booking and
             miss it.

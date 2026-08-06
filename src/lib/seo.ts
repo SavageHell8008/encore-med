@@ -42,9 +42,9 @@ export function buildMetadata({
   ];
 
   return {
-    // `absolute` opts out of the root layout's `%s | EnconeMed` template — the
+    // `absolute` opts out of the root layout's `%s | Encore Care` template — the
     // brand suffix is already appended above, and letting both run produces
-    // "… | EnconeMed | EnconeMed".
+    // "… | Encore Care | Encore Care".
     title: { absolute: truncate(fullTitle, TITLE_MAX) },
     description: truncate(description, DESCRIPTION_MAX),
     alternates: { canonical },
@@ -74,7 +74,7 @@ export function buildMetadata({
 /**
  * Product metadata.
  *
- * The title follows the brief's "[Equipment] | Medical Grade | EnconeMed"
+ * The title follows the brief's "[Equipment] | Medical Grade | Encore Care"
  * pattern only where it fits inside 60 characters; longer product names drop
  * the middle segment rather than being truncated mid-word by Google.
  */

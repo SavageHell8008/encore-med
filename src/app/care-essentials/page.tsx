@@ -39,7 +39,7 @@ const FAQS: Faq[] = [
   {
     question: "Which of these can a family member use without training?",
     answer:
-      "Gloves, masks, diapers and barrier cream. Foley catheters, Ryles feeding tubes and suction catheters all require a trained nurse for placement, and in the case of feeding tubes, for confirming position before every use. Encone Care can send a nurse or teach the family the parts that can safely be taught.",
+      "Gloves, masks, diapers and barrier cream. Foley catheters, Ryles feeding tubes and suction catheters all require a trained nurse for placement, and in the case of feeding tubes, for confirming position before every use. Encore Care can send a nurse or teach the family the parts that can safely be taught.",
   },
   {
     question: "How do I order the right size?",
@@ -110,12 +110,12 @@ export default function CareEssentialsPage() {
               household has been trained, say so when you order and we will
               arrange a nurse through{" "}
               <a
-                href="https://enconecare.in"
+                href="https://encorecare.in"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-brand-green underline-offset-4 hover:underline"
               >
-                Encone Care
+                Encore Care
               </a>{" "}
               rather than leave you to work it out.
             </p>

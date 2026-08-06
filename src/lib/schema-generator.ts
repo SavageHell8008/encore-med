@@ -90,7 +90,7 @@ export function generateWebSiteSchema(): Json {
 /**
  * MedicalBusiness for location pages.
  *
- * `15-local-seo.md`: EnconeMed is a service-area business, so the street
+ * `15-local-seo.md`: Encore Care is a service-area business, so the street
  * address is deliberately NOT published — an SAB must hide it. Service areas
  * are expressed by named city, not a radius.
  */
@@ -269,7 +269,7 @@ export function generateProductSchema(product: Product): Json {
 
     identifier: {
       "@type": "PropertyValue",
-      propertyID: "EnconeMed SKU",
+      propertyID: "Encore Care SKU",
       value: product.slug,
     },
   };

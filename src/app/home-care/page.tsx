@@ -21,9 +21,9 @@ import { buildMetadata } from "@/lib/seo";
 import type { Faq } from "@/lib/types";
 
 export const metadata = buildMetadata({
-  title: "Home Nursing & Care Services — Encone Care",
+  title: "Home Nursing & Care Services — Encore Care",
   description:
-    "Verified nurses, attendants, physiotherapists and doctor visits at home across Delhi NCR, Lucknow, Kanpur, Prayagraj and Varanasi — from EnconeMed's parent, Encone Care.",
+    "Verified nurses, attendants, physiotherapists and doctor visits at home across Delhi NCR, Lucknow, Kanpur, Prayagraj and Varanasi — from Encore Care.",
   path: "/home-care",
 });
 
@@ -42,7 +42,7 @@ const FAQS: Faq[] = [
   {
     question: "Can I get a nurse and equipment together?",
     answer:
-      "Yes. EnconeMed supplies the equipment and Encone Care supplies the nursing, from the same phone number. A hospital bed and an attendant trained to reposition a patient in it can be arranged on one call rather than two.",
+      "Yes. Encore Care supplies both the medical equipment and the nursing services from the same phone number. A hospital bed and an attendant trained to reposition a patient in it can be arranged on one call rather than two.",
   },
   {
     question: "How are the nurses verified?",
@@ -78,7 +78,7 @@ export default function HomeCarePage() {
 
         <div className="mt-10 grid gap-12 lg:grid-cols-[1fr_0.8fr] lg:gap-20">
           <div>
-            <SectionLabel index={1}>Encone Care · home nursing</SectionLabel>
+            <SectionLabel index={1}>Encore Care · home nursing</SectionLabel>
 
             <DisplayHeading
               as="h1"
