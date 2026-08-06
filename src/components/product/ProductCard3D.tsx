@@ -4,8 +4,9 @@ import { useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
-import { ArrowRight, ShieldCheck, Truck, Wrench, type LucideIcon } from "lucide-react";
+import { ArrowRight, MessageCircle, ShieldCheck, Truck, Wrench, type LucideIcon } from "lucide-react";
 import type { Product } from "@/lib/types";
+import { whatsappLink } from "@/lib/constants";
 import { cn } from "@/lib/utils";
 
 // Badges sit on top of a photograph, so each carries an opaque white base
@@ -155,18 +156,31 @@ export function ProductCard3D({ product, priority = false }: { product: Product;
             )}
           </p>
 
-          {/* The one button under the card. */}
-          <span
-            className={cn(
-              "mt-4 inline-flex w-full items-center justify-center gap-2 rounded-xl border px-4 py-2.5 text-sm font-semibold transition-all duration-200",
-              hovered
-                ? "border-brand-green bg-brand-green text-white"
-                : "border-brand-green/40 bg-brand-green/6 text-brand-green",
-            )}
-          >
-            Get the best quote
-            <ArrowRight className="h-4 w-4 transition-transform duration-200 group-hover:translate-x-0.5" aria-hidden />
-          </span>
+          {/* Action buttons under the card */}
+          <div className="relative z-10 mt-4 grid grid-cols-2 gap-2">
+            <Link
+              href={`/products/${product.slug}`}
+              className={cn(
+                "inline-flex items-center justify-center gap-1.5 rounded-xl border px-3 py-2.5 text-xs font-semibold sm:text-sm transition-all duration-200",
+                hovered
+                  ? "border-brand-green bg-brand-green text-white"
+                  : "border-brand-green/40 bg-brand-green/6 text-brand-green",
+              )}
+            >
+              Get Quote
+              <ArrowRight className="h-3.5 w-3.5 transition-transform duration-200 group-hover:translate-x-0.5" aria-hidden />
+            </Link>
+
+            <a
+              href={whatsappLink(`Hi Encore Care, I want to buy ${product.name}. Please share price & details.`)}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center justify-center gap-1.5 rounded-xl border border-brand-mint/50 bg-brand-mint/10 px-3 py-2.5 text-xs font-semibold sm:text-sm text-brand-mint transition-all duration-200 hover:bg-brand-mint hover:text-white"
+            >
+              <MessageCircle className="h-3.5 w-3.5 shrink-0" aria-hidden />
+              Buy Now
+            </a>
+          </div>
         </div>
       </motion.article>
     </motion.div>

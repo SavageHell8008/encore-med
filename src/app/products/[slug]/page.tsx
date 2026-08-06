@@ -5,6 +5,7 @@ import {
   CalendarClock,
   Info,
   MapPin,
+  MessageCircle,
   ShieldCheck,
   Truck,
   Wrench,
@@ -19,7 +20,7 @@ import { JsonLd } from "@/components/JsonLd";
 import { Container } from "@/components/ui/Container";
 import { getProduct, getAllProducts, getRelatedProducts } from "@/data/products";
 import { getCategory } from "@/data/taxonomy";
-import { SERVICE_AREAS } from "@/lib/constants";
+import { SERVICE_AREAS, whatsappLink } from "@/lib/constants";
 import {
   generateFAQSchema,
   generateProductSchema,
@@ -161,6 +162,17 @@ export default async function ProductPage({ params }: { params: Params }) {
                   publishing a number that fits nobody. Ask and we will give you
                   a straight one, GST stated separately.
                 </p>
+                <div className="mt-4 pt-3 border-t border-brand-green/20">
+                  <a
+                    href={whatsappLink(`Hi Encore Care, I want to buy ${product.name}. Please share price & details.`)}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-2 rounded-xl border border-brand-mint/50 bg-brand-mint/10 px-4 py-2.5 text-sm font-semibold text-brand-mint transition-all hover:bg-brand-mint hover:text-white"
+                  >
+                    <MessageCircle className="h-4 w-4" aria-hidden />
+                    Buy Now via WhatsApp
+                  </a>
+                </div>
               </div>
 
               <p className="mt-4 flex items-start gap-2 text-xs leading-relaxed text-text-muted">

@@ -1,7 +1,7 @@
 import { notFound } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowRight, Info, ShieldAlert } from "lucide-react";
+import { ArrowRight, Info, MessageCircle, ShieldAlert } from "lucide-react";
 import { Breadcrumbs } from "@/components/layout/Breadcrumbs";
 import { SafetyInformation } from "@/components/product/SafetyInformation";
 import { InquiryForm } from "@/components/product/InquiryForm";
@@ -20,6 +20,7 @@ import {
 } from "@/lib/schema-generator";
 import { buildMetadata } from "@/lib/seo";
 import { formatDate } from "@/lib/utils";
+import { whatsappLink } from "@/lib/constants";
 
 type Params = Promise<{ slug: string }>;
 
@@ -128,6 +129,17 @@ export default async function CareEssentialPage({ params }: { params: Params }) 
                   by pack. Tell us the situation and we will work the sizes out
                   with you.
                 </p>
+                <div className="mt-4 pt-3 border-t border-brand-green/20">
+                  <a
+                    href={whatsappLink(`Hi Encore Care, I want to buy ${item.name}. Please share available sizes and prices.`)}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-2 rounded-xl border border-brand-mint/50 bg-brand-mint/10 px-4 py-2.5 text-sm font-semibold text-brand-mint transition-all hover:bg-brand-mint hover:text-white"
+                  >
+                    <MessageCircle className="h-4 w-4" aria-hidden />
+                    Buy Now via WhatsApp
+                  </a>
+                </div>
               </div>
 
               <p className="mt-4 flex items-start gap-2 text-xs leading-relaxed text-text-muted">
