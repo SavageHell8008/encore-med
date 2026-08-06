@@ -161,21 +161,21 @@ export function ProductCard3D({ product, priority = false }: { product: Product;
             <Link
               href={`/products/${product.slug}`}
               className={cn(
-                "inline-flex items-center justify-center gap-1.5 rounded-xl border px-3 py-2.5 text-xs font-semibold sm:text-sm transition-all duration-200",
+                "inline-flex items-center justify-center gap-1 rounded-xl border px-2 py-2 text-xs font-semibold whitespace-nowrap transition-all duration-200",
                 hovered
                   ? "border-brand-green bg-brand-green text-white"
                   : "border-brand-green/40 bg-brand-green/6 text-brand-green",
               )}
             >
               Get Quote
-              <ArrowRight className="h-3.5 w-3.5 transition-transform duration-200 group-hover:translate-x-0.5" aria-hidden />
+              <ArrowRight className="h-3.5 w-3.5 shrink-0 transition-transform duration-200 group-hover:translate-x-0.5" aria-hidden />
             </Link>
 
             <a
               href={whatsappLink(`Hi Encone Care, I want to buy ${product.name}. Please share price & details.`)}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center justify-center gap-1.5 rounded-xl border border-brand-mint/50 bg-brand-mint/10 px-3 py-2.5 text-xs font-semibold sm:text-sm text-brand-mint transition-all duration-200 hover:bg-brand-mint hover:text-white"
+              className="inline-flex items-center justify-center gap-1 rounded-xl border border-brand-mint/50 bg-brand-mint/10 px-2 py-2 text-xs font-semibold whitespace-nowrap text-brand-mint transition-all duration-200 hover:bg-brand-mint hover:text-white"
             >
               <MessageCircle className="h-3.5 w-3.5 shrink-0" aria-hidden />
               Buy Now
