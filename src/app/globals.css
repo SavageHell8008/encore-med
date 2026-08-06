@@ -1,26 +1,249 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+/* ==========================================================================
+   EnconeMed design tokens — light theme.
+
+   White base with a very light green gradient wash, taken from the Encone Care
+   mark. The accent greens are deliberately dark rather than neon: on a white
+   surface a bright green fails contrast as text, so each accent below is the
+   deepest version of its hue that still reads as that colour, and every one
+   clears WCAG AA (4.5:1) against white as body text. Tints for fills come from
+   opacity modifiers (`bg-brand-green/8`), not from separate lighter tokens.
+
+   Tailwind v4 is CSS-first: anything in @theme becomes a utility, so
+   --color-brand-green yields bg-brand-green / text-brand-green / border-brand-green.
+   ========================================================================== */
+
+@theme {
+  /* Accents — contrast ratios against #FFFFFF noted per token. */
+  --color-brand-green: #047857; /* 5.5:1 — primary: links, active state, CTAs */
+  --color-brand-mint: #166534; /* 7.0:1 — positive, pricing */
+  --color-brand-teal: #0f766e; /* 5.4:1 — secondary emphasis */
+  --color-brand-amber: #92400e; /* 7.1:1 — caution, safety notices */
+
+  /* mint and amber sit a step darker than the 4.5:1 minimum deliberately.
+     Both are used at 11px semibold on badges and inside tinted panels
+     (bg-brand-amber/5 in the safety block), where the effective background is
+     not pure white. The extra headroom means a tint behind them cannot quietly
+     push them under AA. */
+
+  /* Surfaces — white through progressively greener tints. */
+  --color-surface: #ffffff;
+  --color-surface-raised: #f4fbf7;
+  --color-surface-sunken: #eaf6f0;
+  --color-surface-strong: #d8ede3;
+
+  /* Text */
+  --color-text-primary: #0b1f17; /* 16.8:1 */
+  --color-text-secondary: #33544a; /* 8.3:1 */
+  /* muted is darker than the usual "muted grey" instinct: it is used inside
+     tinted panels (rental cards, the amber safety block), and at 4.8:1 on pure
+     white it fell to 4.18:1 once a panel tint sat behind it. 5.4:1 on white
+     leaves enough room for any tint in this palette. */
+  --color-text-muted: #55705f;
+
+  /* Hairlines. The editorial layout leans on these heavily, so they are
+     tokens rather than one-off rgba values scattered through components. */
+  --color-line: rgba(4, 120, 87, 0.14);
+  --color-line-strong: rgba(4, 120, 87, 0.26);
+
+  /* Elevation. On white these are soft green-tinted shadows rather than the
+     glows a dark theme needs — a glow on white reads as a blur, not a light. */
+  --shadow-glow: 0 0 0 1px rgba(4, 120, 87, 0.22), 0 8px 24px -8px rgba(4, 120, 87, 0.3);
+  --shadow-glow-lg: 0 0 0 1px rgba(4, 120, 87, 0.3), 0 18px 44px -12px rgba(4, 120, 87, 0.36);
+  --shadow-glow-mint: 0 0 0 1px rgba(21, 128, 61, 0.24), 0 8px 24px -8px rgba(21, 128, 61, 0.3);
+  --shadow-card: 0 1px 2px rgba(11, 31, 23, 0.04), 0 12px 32px -14px rgba(11, 31, 23, 0.18);
+
+  /* Type */
+  --font-sans: var(--font-body), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-display), var(--font-body), ui-sans-serif, sans-serif;
+  --font-mono: var(--font-mono-src), ui-monospace, monospace;
+
+  /* Motion */
+  --animate-float: float 7s ease-in-out infinite;
+  --animate-pulse-glow: pulse-glow 3.5s ease-in-out infinite;
+  --animate-scroll-hint: scroll-hint 2s ease-in-out infinite;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-12px);
   }
 }
 
+@keyframes pulse-glow {
+  0%,
+  100% {
+    opacity: 0.4;
+  }
+  50% {
+    opacity: 0.85;
+  }
+}
+
+@keyframes scroll-hint {
+  0% {
+    transform: translateY(0);
+    opacity: 0;
+  }
+  40% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(10px);
+    opacity: 0;
+  }
+}
+
+/* ==========================================================================
+   Base
+   ========================================================================== */
+
+:root {
+  color-scheme: light;
+}
+
+* {
+  border-color: var(--color-line);
+}
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 6rem;
+}
+
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background-color: var(--color-surface);
+  color: var(--color-text-primary);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+/* Fixed ambient wash — one composited layer, no repaint on scroll. Kept very
+   light: the page is a reading surface first, and a strong tint here would
+   fight every card laid on top of it. */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    radial-gradient(58rem 40rem at 10% -10%, rgba(4, 120, 87, 0.1), transparent 62%),
+    radial-gradient(48rem 34rem at 94% 2%, rgba(15, 118, 110, 0.075), transparent 62%),
+    linear-gradient(180deg, #ffffff 0%, #f2faf6 42%, #e9f6f0 100%);
+}
+
+::selection {
+  background: rgba(4, 120, 87, 0.16);
+  color: var(--color-text-primary);
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-brand-green);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+.skip-link {
+  position: absolute;
+  left: -9999px;
+  top: 0;
+  z-index: 100;
+}
+.skip-link:focus {
+  left: 1rem;
+  top: 1rem;
+  padding: 0.75rem 1.25rem;
+  background: var(--color-surface);
+  border: 1px solid var(--color-brand-green);
+  border-radius: 0.5rem;
+  box-shadow: var(--shadow-card);
+}
+
+/* ==========================================================================
+   Utilities
+   ========================================================================== */
+
+@utility font-display {
+  font-family: var(--font-display);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+/* On white there is nothing to glow against. These keep their names so the
+   markup does not churn, but resolve to a soft lift rather than a halo. */
+@utility text-glow {
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.6);
+}
+
+@utility text-glow-mint {
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.6);
+}
+
+@utility glass {
+  background: rgba(255, 255, 255, 0.78);
+  backdrop-filter: blur(14px) saturate(150%);
+  -webkit-backdrop-filter: blur(14px) saturate(150%);
+  border: 1px solid var(--color-line);
+}
+
+@utility gradient-text {
+  background: linear-gradient(100deg, #047857 0%, #15803d 52%, #0f766e 100%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+}
+
+/* Graph-paper backdrop for the editorial capability sections. */
+@utility grid-lines {
+  background-image:
+    linear-gradient(to right, rgba(4, 120, 87, 0.06) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(4, 120, 87, 0.06) 1px, transparent 1px);
+  background-size: 84px 84px;
+}
+
+@utility scrollbar-thin-brand {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(4, 120, 87, 0.35) transparent;
+
+  &::-webkit-scrollbar {
+    height: 6px;
+    width: 6px;
+  }
+  &::-webkit-scrollbar-thumb {
+    background: rgba(4, 120, 87, 0.35);
+    border-radius: 999px;
+  }
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+}
+
+/* ==========================================================================
+   Reduced motion
+   ========================================================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+@media print {
+  body::before {
+    display: none;
+  }
 }

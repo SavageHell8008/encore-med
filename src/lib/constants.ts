@@ -1,0 +1,362 @@
+/**
+ * Single source of truth for brand, entity, contact and geography constants.
+ *
+ * Values marked "verified" were taken from enconecare.in (the parent company's
+ * live site) on 5 August 2026. Values marked "placeholder" still need a human.
+ *
+ * ⚠️ BRAND NAME — STILL NEEDS A DECISION
+ * The build brief spells the brand "EconeMed" on econemedical.in. The research
+ * corpus and the parent company both point to "EnconeMed" (Encone Care + Med).
+ * `05-geo.md` requires byte-identical entity naming across site, GBP, schema
+ * and directories. Defaulting to "EnconeMed"; change BRAND.name here only.
+ */
+
+export const BRAND = {
+  /** Public-facing brand name. Must match GBP, schema and directories exactly. */
+  name: "EnconeMed",
+  /** Verified: enconecare.in footer — "© 2026 Encone Care Private Limited". */
+  legalName: "Encone Care Private Limited",
+  parent: {
+    name: "Encone Care",
+    url: "https://enconecare.in",
+    /** Verified: parent's own hero tagline. */
+    tagline: "Ghar pe, hospital jaisi care.",
+  },
+  tagline: "Medical Equipment for Modern Healthcare",
+  description:
+    "Rent or buy certified medical equipment — hospital beds, oxygen concentrators, BiPAP and complete home ICU setups — with published pricing, documented sanitisation and expert installation across Delhi.",
+  /** Verified: "since 2022" on enconecare.in. */
+  operatingSince: 2022,
+} as const;
+
+export const SITE_URL = (
+  process.env.NEXT_PUBLIC_SITE_URL ?? "https://econemedical.in"
+).replace(/\/$/, "");
+
+/**
+ * Contact details.
+ *
+ * Phone numbers and the registered address are verified from enconecare.in.
+ * The email is a placeholder — the parent site exposes no address publicly, so
+ * it must be confirmed before launch rather than guessed at.
+ */
+export const CONTACT = {
+  /** Verified: +91 888 769 9109 (primary line on enconecare.in). */
+  phone: process.env.NEXT_PUBLIC_PHONE ?? "+918887699109",
+  phoneDisplay: process.env.NEXT_PUBLIC_PHONE_DISPLAY ?? "+91 88876 99109",
+  /** Verified: second published line. */
+  phoneAlt: process.env.NEXT_PUBLIC_PHONE_ALT ?? "+918920813780",
+  phoneAltDisplay: process.env.NEXT_PUBLIC_PHONE_ALT_DISPLAY ?? "+91 89208 13780",
+  whatsapp: process.env.NEXT_PUBLIC_WHATSAPP ?? "918887699109",
+  /** ⚠️ Placeholder — confirm the real inbox. */
+  email: process.env.NEXT_PUBLIC_EMAIL ?? "care@econemedical.in",
+  /** ⚠️ Placeholder — Companies Act s.12(3)(c). Leave blank rather than invent. */
+  cin: process.env.NEXT_PUBLIC_CIN ?? "",
+  /** Verified: S-558 Dwarka Bhawan, Shakarpur, Delhi 110092. */
+  registeredOffice: {
+    street: "S-558 Dwarka Bhawan",
+    locality: "Shakarpur",
+    city: "Delhi",
+    region: "Delhi",
+    postalCode: "110092",
+    country: "IN",
+  },
+  hours: "Open 24×7 — equipment delivery 8:00 AM – 10:00 PM IST",
+  social: {
+    facebook: "https://www.facebook.com/profile.php?id=100083129450615",
+    instagram: "https://www.instagram.com/enconecarenursing",
+  },
+} as const;
+
+/**
+ * Verified operating figures from enconecare.in. Specific, checkable numbers
+ * build credibility where vague superlatives erode it (`09-trust-psychology.md`),
+ * so nothing here is rounded up or embellished.
+ */
+export const PARENT_STATS = [
+  { value: "500+", label: "Families served since 2022" },
+  { value: "100+", label: "Qualified nurses on the network" },
+  { value: "24×7", label: "Availability across Delhi NCR & UP" },
+  { value: "< 4 hrs", label: "Equipment delivered and installed" },
+] as const;
+
+/** Pre-filled WhatsApp deep link — a first-class channel, not a fallback. */
+export function whatsappLink(message?: string): string {
+  const base = `https://wa.me/${CONTACT.whatsapp}`;
+  return message ? `${base}?text=${encodeURIComponent(message)}` : base;
+}
+
+export function telLink(): string {
+  return `tel:${CONTACT.phone}`;
+}
+
+/* -------------------------------------------------------------------------- */
+/*  Geography                                                                 */
+/* -------------------------------------------------------------------------- */
+
+export type ServiceArea = {
+  slug: string;
+  name: string;
+  region: string;
+  /**
+   * `live`         — EnconeMed delivers and installs equipment here today.
+   * `care-network` — Encone Care's nursing network operates here (verified from
+   *                  enconecare.in), and equipment can be arranged on request,
+   *                  but same-day equipment delivery is not yet promised.
+   */
+  status: "live" | "care-network";
+  /** Verified count of neighbourhoods the parent lists for this city. */
+  areaCount?: number;
+  postalCodePrefixes?: string[];
+};
+
+/**
+ * `15-local-seo.md`: a service-area business defines coverage by named city and
+ * postal code, not a radius. The `care-network` tier exists so the parent's real
+ * footprint can be shown honestly without implying an equipment delivery promise
+ * we cannot keep — one broken delivery commitment costs more trust than the
+ * extra city listings are worth (`09-trust-psychology.md`).
+ */
+export const SERVICE_AREAS: ServiceArea[] = [
+  { slug: "delhi", name: "Delhi", region: "Delhi", status: "live", areaCount: 35, postalCodePrefixes: ["110"] },
+  { slug: "new-delhi", name: "New Delhi", region: "Delhi", status: "live", postalCodePrefixes: ["110"] },
+  { slug: "noida", name: "Noida", region: "Uttar Pradesh", status: "care-network", areaCount: 32 },
+  { slug: "greater-noida", name: "Greater Noida", region: "Uttar Pradesh", status: "care-network", areaCount: 12 },
+  { slug: "gurgaon", name: "Gurgaon", region: "Haryana", status: "care-network", areaCount: 32 },
+  { slug: "ghaziabad", name: "Ghaziabad", region: "Uttar Pradesh", status: "care-network", areaCount: 11 },
+  { slug: "faridabad", name: "Faridabad", region: "Haryana", status: "care-network", areaCount: 9 },
+  { slug: "lucknow", name: "Lucknow", region: "Uttar Pradesh", status: "care-network", areaCount: 20 },
+  { slug: "kanpur", name: "Kanpur", region: "Uttar Pradesh", status: "care-network", areaCount: 10 },
+  { slug: "prayagraj", name: "Prayagraj", region: "Uttar Pradesh", status: "care-network", areaCount: 10 },
+  { slug: "varanasi", name: "Varanasi", region: "Uttar Pradesh", status: "care-network", areaCount: 10 },
+];
+
+export const LIVE_SERVICE_AREAS = SERVICE_AREAS.filter((a) => a.status === "live");
+export const CARE_NETWORK_AREAS = SERVICE_AREAS.filter((a) => a.status === "care-network");
+
+export const CITY_OPTIONS = SERVICE_AREAS.map((a) => a.name);
+
+/* -------------------------------------------------------------------------- */
+/*  Encone Care services (verified from enconecare.in)                        */
+/* -------------------------------------------------------------------------- */
+
+export type CareService = {
+  slug: string;
+  name: string;
+  description: string;
+  /** Path on enconecare.in, not on this site. */
+  href: string;
+};
+
+/**
+ * The parent's ten home-care services, with their own copy.
+ *
+ * These are surfaced here because equipment is only half the answer: a family
+ * that needs a hospital bed usually also needs someone who knows how to turn a
+ * patient in it. `02-caregiver-journey.md` describes the decision as a single
+ * journey, not two purchases — so the handover between the two brands should be
+ * one click, not a search.
+ */
+export const CARE_SERVICES: CareService[] = [
+  {
+    slug: "nursing-staff",
+    name: "Nursing Staff",
+    description:
+      "Trained male & female staff nurses providing professional nursing care for 12/24 hour home care shifts across Delhi NCR.",
+    href: "https://enconecare.in/services/nursing-staff",
+  },
+  {
+    slug: "attendants",
+    name: "Patient Attendants",
+    description:
+      "Dedicated attendants and professional caregivers providing in-home care — daily care, mobility assistance, and companionship.",
+    href: "https://enconecare.in/services/attendants",
+  },
+  {
+    slug: "elder-care",
+    name: "Elder Care",
+    description:
+      "Compassionate senior citizen care, elderly care and personal home care — daily care, companionship & monitoring.",
+    href: "https://enconecare.in/services/elder-care",
+  },
+  {
+    slug: "baby-care",
+    name: "Mother & Baby Care",
+    description:
+      "Experienced nannies and babysitters for newborns, infants, and toddlers — safe, nurturing child care at home.",
+    href: "https://enconecare.in/services/baby-care",
+  },
+  {
+    slug: "specialized-care",
+    name: "Specialised Care",
+    description:
+      "Expert neurological care and disability care for paralysis, bedridden patients & complex conditions.",
+    href: "https://enconecare.in/services/specialized-care",
+  },
+  {
+    slug: "post-operative-care",
+    name: "Post-Operative Care",
+    description:
+      "Trained nurses for orthopaedic care, dressing care, medication & recovery support after surgery.",
+    href: "https://enconecare.in/services/post-operative-care",
+  },
+  {
+    slug: "physiotherapy",
+    name: "Physiotherapy",
+    description:
+      "Qualified physiotherapists for home rehabilitation, pain management, and walking assistance.",
+    href: "https://enconecare.in/services/physiotherapy",
+  },
+  {
+    slug: "doctor-visit",
+    name: "Doctor Visit",
+    description:
+      "Experienced doctors for a doctor visit at home — consultations, diagnosis & treatment.",
+    href: "https://enconecare.in/services/doctor-visit",
+  },
+  {
+    slug: "injection-visit",
+    name: "Injection Visit",
+    description: "Qualified nurses for safe, hygienic home injection visits.",
+    href: "https://enconecare.in/services/injection-visit",
+  },
+  {
+    slug: "sleep-study",
+    name: "Sleep Study",
+    description: "Home sleep study tests to diagnose sleep apnoea and disorders.",
+    href: "https://enconecare.in/services/sleep-study",
+  },
+];
+
+/**
+ * Condition-led entry points on the parent site. `14-mental-models.md`:
+ * caregivers search by condition and symptom, not by device category — these
+ * are the bridge from "my father had a stroke" to the right equipment.
+ */
+export const CARE_CONDITIONS = [
+  { name: "Dementia & Alzheimer's care", href: "https://enconecare.in/conditions/dementia-alzheimers-care" },
+  { name: "Post-stroke rehabilitation", href: "https://enconecare.in/conditions/post-stroke-rehab" },
+  { name: "Parkinson's patient care", href: "https://enconecare.in/conditions/parkinsons-patient-care" },
+  { name: "Cancer patient care at home", href: "https://enconecare.in/conditions/cancer-patient-care-at-home" },
+  { name: "Paralysis patient care", href: "https://enconecare.in/conditions/paralysis-care" },
+] as const;
+
+/* -------------------------------------------------------------------------- */
+/*  Trust signals                                                             */
+/* -------------------------------------------------------------------------- */
+
+/**
+ * ⚠️ Claim discipline (`01-business-understanding.md`): no fabricated CDSCO
+ * licensure, ISO 13485, ICMED or AiMeD membership, and never the word
+ * "marketplace" — this is structurally an inventory-model business under the
+ * Consumer Protection E-Commerce Rules, 2020.
+ *
+ * Every claim below is about EnconeMed's own process, which it can verify.
+ */
+export const TRUST_PILLARS = [
+  {
+    id: "sanitisation",
+    title: "Documented sanitisation between rentals",
+    body: "Every returned unit is detergent-washed, disinfected and inspected against the manufacturer's reprocessing instructions before it goes out again. You get the checklist with the delivery.",
+    icon: "shield",
+  },
+  {
+    id: "pricing",
+    title: "One quote, and it does not move",
+    body: "Ask and you get a straight number the same day — delivery, installation and servicing already in it, GST stated separately. It does not change because you sounded worried on the phone.",
+    icon: "receipt",
+  },
+  {
+    id: "delivery",
+    title: "Delivered and installed in under four hours",
+    body: "A technician assembles the equipment, commissions it, and stays until whoever is doing the caring has operated it themselves.",
+    icon: "truck",
+  },
+  {
+    id: "support",
+    title: "Nurses on the other end of the same number",
+    body: "Encone Care's 100+ verified nurses and attendants cover the same cities. Equipment and the person who knows how to use it come from one call.",
+    icon: "headset",
+  },
+] as const;
+
+/* -------------------------------------------------------------------------- */
+/*  Navigation                                                                */
+/* -------------------------------------------------------------------------- */
+
+/**
+ * Dual-door IA (`05-information-architecture-research.md`): an object-type door
+ * (Equipment / Care Essentials) alongside a situation door, kept flat and
+ * cross-linked rather than nested.
+ */
+export const NAV_LINKS = [
+  { href: "/products", label: "Equipment" },
+  { href: "/care-essentials", label: "Care Essentials" },
+  { href: "/home-care", label: "Home Care" },
+  { href: "/blog", label: "Resources" },
+  { href: "/about", label: "About" },
+  { href: "/contact", label: "Contact" },
+] as const;
+
+export const FOOTER_LINKS = {
+  equipment: {
+    title: "Equipment",
+    links: [
+      { href: "/categories/hospital-beds", label: "Hospital Beds" },
+      { href: "/categories/oxygen-concentrators", label: "Oxygen Concentrators" },
+      { href: "/categories/bipap-cpap", label: "BiPAP & CPAP" },
+      { href: "/categories/wheelchairs", label: "Wheelchairs & Mobility" },
+      { href: "/categories/patient-monitors", label: "Patient Monitors" },
+      { href: "/categories/icu-setup", label: "Home ICU Setup" },
+    ],
+  },
+  homeCare: {
+    title: "Home Care",
+    links: [
+      { href: "/home-care", label: "All care services" },
+      { href: "https://enconecare.in/services/nursing-staff", label: "Nursing Staff" },
+      { href: "https://enconecare.in/services/elder-care", label: "Elder Care" },
+      { href: "https://enconecare.in/services/physiotherapy", label: "Physiotherapy" },
+      { href: "https://enconecare.in/services/post-operative-care", label: "Post-Operative Care" },
+      { href: "https://enconecare.in/caretakers", label: "Our Caretakers" },
+    ],
+  },
+  company: {
+    title: "Company",
+    links: [
+      { href: "/about", label: "About EnconeMed" },
+      { href: "/certifications", label: "Quality & Sanitisation" },
+      { href: "/contact", label: "Contact" },
+      { href: "https://enconecare.in/verification-process", label: "Verification Process" },
+      { href: "https://enconecare.in/faq", label: "FAQ" },
+    ],
+  },
+  legal: {
+    title: "Legal",
+    links: [
+      { href: "/privacy", label: "Privacy Policy" },
+      { href: "/terms", label: "Terms of Service" },
+      { href: "/refund-policy", label: "Refund & Return Policy" },
+      { href: "https://enconecare.in/editorial-policy", label: "Editorial Policy" },
+    ],
+  },
+} as const;
+
+/* -------------------------------------------------------------------------- */
+/*  SEO                                                                       */
+/* -------------------------------------------------------------------------- */
+
+export const DEFAULT_KEYWORDS = [
+  "medical equipment supplier india",
+  "hospital bed on rent delhi",
+  "oxygen concentrator rent delhi",
+  "bipap machine price india",
+  "icu setup at home delhi",
+  "medical equipment rental delhi ncr",
+] as const;
+
+export const OG_IMAGE = {
+  url: "/opengraph-image",
+  width: 1200,
+  height: 630,
+} as const;
