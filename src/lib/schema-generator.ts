@@ -151,53 +151,31 @@ export function generateBreadcrumbSchema(
 export function generateProductSchema(product: Product): Json {
   const url = absoluteUrl(`/products/${product.slug}`, SITE_URL);
   const laySynonyms = getCategory(product.categorySlug)?.laySynonyms ?? [];
-  const availability = product.inStock
-    ? "https://schema.org/InStock"
-    : "https://schema.org/OutOfStock";
-
-  const areaServed = LIVE_SERVICE_AREAS.map((a) => ({ "@type": "City", name: a.name }));
 
   /**
-   * Offers carry no price.
+   * No `offers` node at all — not even an unpriced one.
    *
-   * The catalogue publishes none, so emitting one here would be marking up
-   * content that does not exist on the page — the same violation as inventing
-   * a rating. `businessFunction` still distinguishes Sell from LeaseOut, which
-   * is the genuinely useful signal: it tells a search engine this item can be
-   * rented, not just bought.
+   * `price` is a required property of Offer the moment `offers` is present
+   * (https://developers.google.com/search/docs/appearance/structured-data/product).
+   * An earlier version of this file emitted `offers` with `priceCurrency` but
+   * no `price`, on the theory that `businessFunction` alone (Sell vs LeaseOut)
+   * was worth the markup. It was not: Search Console's Product snippets and
+   * Merchant listings reports both flagged every page as "1 invalid item
+   * detected", because an incomplete Offer is worse than no Offer — it claims
+   * eligibility for a rich result and then fails validation.
    *
-   * Accepted cost: without `price` or `priceSpecification`, these pages are not
-   * eligible for Google's price-carrying product rich results. That follows
-   * from the pricing decision, not from a modelling mistake.
+   * The catalogue publishes no prices, full stop, so there is no way to
+   * satisfy this requirement honestly. Google also explicitly disallows
+   * placeholder values like "Contact for price" in the price field. Dropping
+   * `offers` withdraws from product-rich-result eligibility cleanly instead of
+   * claiming it and failing — Product + MedicalDevice still carry name,
+   * description, image, category, specs and the full clinical profile, which
+   * is what actually renders on the page.
+   *
+   * If real prices are ever published, reintroduce `offers` with `price` and
+   * `priceCurrency` set from the same source the page displays — never before
+   * that source exists.
    */
-  const offers: Json[] = [
-    {
-      "@type": "Offer",
-      "@id": `${url}#offer-sell`,
-      businessFunction: "https://schema.org/Sell",
-      name: `Buy ${product.name}`,
-      availability,
-      priceCurrency: "INR",
-      url,
-      seller: { "@id": ORG_ID },
-      areaServed,
-    },
-  ];
-
-  if (product.offerMode === "rent-or-buy") {
-    offers.push({
-      "@type": "Offer",
-      "@id": `${url}#offer-lease`,
-      businessFunction: "https://schema.org/LeaseOut",
-      name: `Rent ${product.name}`,
-      availability,
-      priceCurrency: "INR",
-      url,
-      seller: { "@id": ORG_ID },
-      areaServed,
-    });
-  }
-
   const med = product.medical;
 
   // https://schema.org/MedicalDevice — MedicalEntity supertype properties.
@@ -274,11 +252,6 @@ export function generateProductSchema(product: Product): Json {
     },
   };
 
-  // A single Offer stays a bare node; two are emitted as a plain array rather
-  // than wrapped in AggregateOffer, whose whole purpose is lowPrice/highPrice —
-  // required properties we have no values for.
-  schema.offers = offers.length === 1 ? offers[0] : offers;
-
   return schema;
 }
 
@@ -316,18 +289,9 @@ export function generateCareEssentialSchema(item: CareEssential): Json {
       name: v.label,
       value: v.value,
     })),
-    // Consumables are sale-only and, like everything else here, unpriced.
-    offers: {
-      "@type": "Offer",
-      "@id": `${url}#offer-sell`,
-      businessFunction: "https://schema.org/Sell",
-      name: `Buy ${item.name}`,
-      availability: "https://schema.org/InStock",
-      priceCurrency: "INR",
-      url,
-      seller: { "@id": ORG_ID },
-      areaServed: LIVE_SERVICE_AREAS.map((a) => ({ "@type": "City", name: a.name })),
-    },
+    // No `offers` — see the note in generateProductSchema. Consumables are
+    // unpriced same as equipment, so an Offer here would fail the same
+    // required-`price` validation and produce the same GSC "invalid item".
   };
 
   if (med) {

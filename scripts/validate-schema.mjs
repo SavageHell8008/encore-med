@@ -13,8 +13,13 @@
  *     Product sets (catches invented or misremembered property names)
  *   - `recognizingAuthority` being present at all — see the note in
  *     `src/lib/types.ts`, naming CDSCO there asserts an endorsement we do not have
- *   - a missing `offers`, which would mean multi-typing has cost us the Product
- *     rich result
+ *   - an `offers` node being present at all, on ANY node. The catalogue
+ *     publishes no prices, and `price` is a required property of Offer the
+ *     moment `offers` exists — an earlier version of this file emitted
+ *     price-less offers and Search Console's Product snippets / Merchant
+ *     listings reports both flagged every page as "1 invalid item detected".
+ *     Absent is valid; incomplete is not. If real prices are ever published,
+ *     update this check alongside re-adding `offers` in schema-generator.ts.
  */
 import { readFileSync, readdirSync } from "node:fs";
 import { dirname, join } from "node:path";
@@ -111,12 +116,8 @@ for (const { path: dir, requireMedicalDevice } of DIRS) {
     }
     if (productOnly.legalStatus !== undefined)
       fail("non-device item asserts a legalStatus");
-    if (!productOnly.offers) fail("Product offers missing");
-    for (const banned of ["price", "priceSpecification", "lowPrice", "highPrice"]) {
-      const offers = Array.isArray(productOnly.offers) ? productOnly.offers : [productOnly.offers];
-      if (offers.some((o) => o[banned] !== undefined))
-        fail(`offer carries "${banned}" but the site publishes no prices`);
-    }
+    if (productOnly.offers !== undefined)
+      fail("Product carries an offers node, but the site publishes no prices — see the file header");
     console.log("  ✓ plain Product (correctly not typed as a medical device)");
     continue;
   }
@@ -161,19 +162,11 @@ for (const { path: dir, requireMedicalDevice } of DIRS) {
   // The deliberate omission — asserting CDSCO endorsement would be an overclaim.
   if (node.recognizingAuthority) fail("recognizingAuthority present (overclaim risk)");
 
-  // Product side must survive multi-typing.
-  if (!node.offers) fail("Product offers missing");
-
-  // The catalogue publishes no prices, so no price may leak into the markup.
-  // Marking up a figure that appears nowhere on the page is the same class of
-  // violation as inventing a rating.
-  const offerList = Array.isArray(node.offers) ? node.offers : [node.offers];
-  for (const o of offerList) {
-    for (const banned of ["price", "priceSpecification", "lowPrice", "highPrice"]) {
-      if (o[banned] !== undefined) fail(`offer carries "${banned}" but the site publishes no prices`);
-    }
-    if (!o.businessFunction) fail("offer missing businessFunction (Sell / LeaseOut)");
-  }
+  // No `offers` on the Product+MedicalDevice node — see the file header. An
+  // Offer without `price` is invalid per Google's spec, and the catalogue has
+  // no price to give it, so the node opts out of that eligibility entirely.
+  if (node.offers !== undefined)
+    fail("Product carries an offers node, but the site publishes no prices — see the file header");
 
   const serious = node.seriousAdverseOutcome?.length ?? 0;
   const routine = node.adverseOutcome?.length ?? 0;

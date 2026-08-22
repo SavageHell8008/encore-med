@@ -1,5 +1,33 @@
 # Phase 1 — Build Handover
 
+> **Update, 14 Aug 2026 (Product snippets / Merchant listings fix).** Search
+> Console's **Product snippets** and **Merchant listings** reports both showed
+> "1 invalid item detected". Cause: `generateProductSchema` and
+> `generateCareEssentialSchema` emitted an `offers` node with `priceCurrency`
+> and `businessFunction` but no `price` — and per Google's Product structured
+> data spec, `price` is required the instant `offers` is present. An incomplete
+> Offer is worse than none: it claims rich-result eligibility and then fails
+> validation, which is exactly what both reports were surfacing.
+>
+> Since the catalogue publishes no prices at all (a deliberate decision — see
+> the header of `src/lib/types.ts`) and Google explicitly disallows placeholder
+> values like "Contact for price", there was no way to complete the Offer
+> honestly. Fix: **`offers` is no longer emitted anywhere**, for either
+> catalogue. Product + MedicalDevice still carry name, description, image,
+> category, specs and the full clinical profile — everything that actually
+> renders on the page — they just no longer claim commerce-rich-result
+> eligibility they can't back.
+>
+> `scripts/validate-schema.mjs` now fails the build if `offers` appears on
+> *any* node in either catalogue (previously it required `offers` and only
+> checked that `price` was absent from it — the opposite of the current rule).
+> Verified: all 35 nodes valid, zero `offers` keys in the built HTML.
+>
+> **If real prices are ever published**, re-add `offers` with genuine `price`
+> + `priceCurrency` sourced from the same place the page displays the number,
+> and flip the corresponding check in `validate-schema.mjs` back around — never
+> ship one without the other.
+
 > **Update, 6 Aug 2026 (homepage vertical rhythm).** Every homepage section
 > carried `py-24 lg:py-32` — 128px top **and** bottom — so two adjacent sections
 > produced 256px of dead space before their own internal margins counted.
