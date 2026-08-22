@@ -1,5 +1,5 @@
 /**
- * Validates the Product + MedicalDevice JSON-LD in the *built* output.
+ * Validates the MedicalDevice / Thing JSON-LD in the *built* output.
  *
  * Run after `npm run build`: `npm run validate:schema`
  *
@@ -10,16 +10,25 @@
  *
  * Deliberately treated as failures:
  *   - any property outside the verified Thing / MedicalEntity / MedicalDevice /
- *     Product sets (catches invented or misremembered property names)
+ *     auxiliary-descriptive sets (catches invented or misremembered property names)
  *   - `recognizingAuthority` being present at all — see the note in
  *     `src/lib/types.ts`, naming CDSCO there asserts an endorsement we do not have
  *   - an `offers` node being present at all, on ANY node. The catalogue
  *     publishes no prices, and `price` is a required property of Offer the
- *     moment `offers` exists — an earlier version of this file emitted
- *     price-less offers and Search Console's Product snippets / Merchant
- *     listings reports both flagged every page as "1 invalid item detected".
- *     Absent is valid; incomplete is not. If real prices are ever published,
- *     update this check alongside re-adding `offers` in schema-generator.ts.
+ *     moment `offers` exists.
+ *   - `"Product"` appearing anywhere in ANY node's `@type`, on ANY node. Google
+ *     requires `offers`, `review` or `aggregateRating` the instant `"Product"`
+ *     is present — co-typing with MedicalDevice does not exempt it — and this
+ *     catalogue can supply none of the three honestly (no real prices, no
+ *     fabricated reviews). This was tried twice and failed twice in Search
+ *     Console before landing here: first `offers` with no `price`, then
+ *     `Product` with no `offers`/`review`/`aggregateRating`. Both produced
+ *     "1 invalid item detected" in the Product snippets / Merchant listings
+ *     reports. See `src/lib/schema-generator.ts` for the full history.
+ *
+ * If real prices or genuine third-party reviews are ever available, this file
+ * needs updating in lockstep with schema-generator.ts — never one without the
+ * other.
  */
 import { readFileSync, readdirSync } from "node:fs";
 import { dirname, join } from "node:path";
@@ -28,9 +37,9 @@ import { fileURLToPath } from "node:url";
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..", ".next/server/app");
 
 /**
- * Both catalogues are checked. Care essentials are only multi-typed as
- * MedicalDevice where they are genuinely notified devices, so that directory is
- * marked optional: a plain Product node there is correct, not a failure.
+ * Both catalogues are checked. Care essentials are only typed MedicalDevice
+ * where they are genuinely notified devices, so that directory is marked
+ * optional: a plain `Thing` node there is correct, not a failure.
  */
 const DIRS = [
   { path: join(ROOT, "products"), requireMedicalDevice: true },
@@ -61,13 +70,22 @@ const THING = new Set([
   "identifier", "image", "mainEntityOfPage", "name", "owner", "potentialAction",
   "sameAs", "subjectOf", "url", "@context", "@type", "@id",
 ]);
-/** Product-side properties, legitimate on the multi-typed node. */
-const PRODUCT = new Set([
-  "brand", "category", "offers", "aggregateRating", "review", "sku", "gtin",
-  "additionalProperty", "isSimilarTo", "isRelatedTo", "manufacturer", "model",
-  "audience", "hasMerchantReturnPolicy", "weight", "width", "height", "depth",
-  "color", "material", "productID", "releaseDate", "award", "size", "keywords",
+/**
+ * Descriptive fields carried over from when these nodes were typed `Product`.
+ * They are harmless extension properties on a `MedicalDevice`/`Thing` node —
+ * Google does not validate or penalise unrecognised property/type
+ * combinations, it simply does not enrol the node in a feature it never
+ * claimed via `@type`. Kept here so the "unknown property" check below still
+ * passes for `brand`, `category`, `additionalProperty`, etc.
+ */
+const AUXILIARY_DESCRIPTIVE = new Set([
+  "brand", "category", "sku", "gtin", "additionalProperty", "isSimilarTo",
+  "isRelatedTo", "manufacturer", "model", "audience", "weight", "width",
+  "height", "depth", "color", "material", "productID", "releaseDate",
+  "award", "size", "keywords",
 ]);
+/** Never allowed — see the file header. */
+const BANNED = new Set(["offers", "aggregateRating", "review", "hasMerchantReturnPolicy"]);
 
 const VALID_SPECIALTIES = new Set([
   "Anesthesia","Cardiovascular","CommunityHealth","Dentistry","Dermatology",
@@ -99,26 +117,33 @@ for (const { path: dir, requireMedicalDevice } of DIRS) {
   const isType = (n, t) =>
     Array.isArray(n["@type"]) ? n["@type"].includes(t) : n["@type"] === t;
 
-  const node = parsed.find((n) => isType(n, "MedicalDevice"));
-  const productOnly = parsed.find((n) => isType(n, "Product"));
-
   console.log(`\n${file}`);
   checked++;
 
+  // Blanket ban, checked on every top-level node regardless of which branch
+  // runs below: "Product" must never appear, anywhere, in any @type.
+  for (const n of parsed) {
+    if (isType(n, "Product")) fail(`node ${n["@id"] ?? "(no @id)"} is typed "Product" — banned, see file header`);
+  }
+
+  const node = parsed.find((n) => isType(n, "MedicalDevice"));
+  const thing = parsed.find((n) => isType(n, "Thing"));
+
   if (!node) {
-    if (requireMedicalDevice) { fail("no Product+MedicalDevice node found"); continue; }
-    // A consumable that is not a notified device: verify it is a clean Product
+    if (requireMedicalDevice) { fail("no MedicalDevice node found"); continue; }
+    // A consumable that is not a notified device: verify it is a clean Thing
     // and, crucially, that it did NOT sprout MedicalDevice properties anyway.
-    if (!productOnly) { fail("no Product node found"); continue; }
+    if (!thing) { fail("no Thing node found"); continue; }
     for (const k of MEDICAL_DEVICE_OWN) {
-      if (productOnly[k] !== undefined)
+      if (thing[k] !== undefined)
         fail(`non-device item carries MedicalDevice property "${k}"`);
     }
-    if (productOnly.legalStatus !== undefined)
+    if (thing.legalStatus !== undefined)
       fail("non-device item asserts a legalStatus");
-    if (productOnly.offers !== undefined)
-      fail("Product carries an offers node, but the site publishes no prices — see the file header");
-    console.log("  ✓ plain Product (correctly not typed as a medical device)");
+    for (const banned of BANNED) {
+      if (thing[banned] !== undefined) fail(`Thing node carries banned property "${banned}"`);
+    }
+    console.log("  ✓ plain Thing (correctly not typed as a medical device)");
     continue;
   }
 
@@ -128,8 +153,12 @@ for (const { path: dir, requireMedicalDevice } of DIRS) {
       !MEDICAL_DEVICE_OWN.has(key) &&
       !MEDICAL_ENTITY_INHERITED.has(key) &&
       !THING.has(key) &&
-      !PRODUCT.has(key)
+      !AUXILIARY_DESCRIPTIVE.has(key)
     ) fail(`unknown property "${key}"`);
+  }
+
+  for (const banned of BANNED) {
+    if (node[banned] !== undefined) fail(`MedicalDevice node carries banned property "${banned}"`);
   }
 
   // Required MedicalDevice coverage.
@@ -161,12 +190,6 @@ for (const { path: dir, requireMedicalDevice } of DIRS) {
 
   // The deliberate omission — asserting CDSCO endorsement would be an overclaim.
   if (node.recognizingAuthority) fail("recognizingAuthority present (overclaim risk)");
-
-  // No `offers` on the Product+MedicalDevice node — see the file header. An
-  // Offer without `price` is invalid per Google's spec, and the catalogue has
-  // no price to give it, so the node opts out of that eligibility entirely.
-  if (node.offers !== undefined)
-    fail("Product carries an offers node, but the site publishes no prices — see the file header");
 
   const serious = node.seriousAdverseOutcome?.length ?? 0;
   const routine = node.adverseOutcome?.length ?? 0;

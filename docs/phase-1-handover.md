@@ -1,5 +1,38 @@
 # Phase 1 — Build Handover
 
+> **Update, 22 Aug 2026 (Product snippets fix, take two).** The 14 Aug fix
+> (removing `offers` but keeping `@type: ["Product", "MedicalDevice"]`) traded
+> one invalid-item cause for another. Search Console re-flagged every page —
+> same reports, new message: *"Either 'offers', 'review', or 'aggregateRating'
+> should be specified"*. Google's Product validation requires one of those
+> three the instant `"Product"` appears in `@type` at all; co-typing with
+> MedicalDevice does not exempt it.
+>
+> We can supply none of the three honestly — no real prices (structural, see
+> `src/lib/types.ts`), and inventing reviews or a rating is a harder rule
+> already in force elsewhere in `schema-generator.ts` (self-serving
+> Review/AggregateRating on Organization/LocalBusiness is explicitly banned).
+>
+> **Actual fix: `"Product"` is no longer emitted anywhere, on anything.**
+> - Equipment (`generateProductSchema`): `@type` is `MedicalDevice` alone.
+> - Care essentials (`generateCareEssentialSchema`): `MedicalDevice` for the 5
+>   regulated devices, `Thing` for the 2 that aren't (adult diapers, catheter
+>   lubricant gel) — `Thing` because it's schema.org's root type, always valid,
+>   and isn't enrolled in any Google rich-result feature, so it can't be
+>   flagged invalid for one it never claimed.
+>
+> `validate-schema.mjs` now bans `"Product"` in `@type` on every node in both
+> catalogues, not just the primary one — verified against the actual built
+> HTML with a real JSON parse (not a text grep, which gave false positives on
+> minified single-line JSON-LD). **35/35 nodes valid, zero `Product` types,
+> zero `offers` keys**, confirmed by parsing every script tag in every built
+> page rather than trusting the validator's own report.
+>
+> This was two attempts in a row that each looked complete and each drew a new
+> Search Console flag. If this needs revisiting a third time, read the doc
+> comment at the top of `generateProductSchema` first — it has the full history
+> so the same two dead ends aren't retried.
+
 > **Update, 14 Aug 2026 (Product snippets / Merchant listings fix).** Search
 > Console's **Product snippets** and **Merchant listings** reports both showed
 > "1 invalid item detected". Cause: `generateProductSchema` and

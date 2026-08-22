@@ -8,10 +8,17 @@
  * 1. Organization goes on the home and about pages only, not sitewide. Repeating
  *    it on every URL adds bytes and no signal.
  * 2. BreadcrumbList goes everywhere below the root.
- * 3. Product is always the primary @type. `MedicalDevice` has no Google
- *    rich-result support, so it is layered as a secondary type, never alone.
- * 4. A rentable item needs TWO Offers — `businessFunction: LeaseOut` for rental
- *    and `Sell` for purchase. One Offer cannot express both.
+ * 3. `"Product"` is never emitted, on anything, anywhere in this file. Google
+ *    requires `offers`, `review` or `aggregateRating` the instant `"Product"`
+ *    appears in `@type` — co-typing with MedicalDevice does not exempt it —
+ *    and this catalogue has none of the three to offer honestly (no real
+ *    prices, no fabricated reviews per point 5 below). Equipment and regulated
+ *    care-essentials are typed `MedicalDevice` alone; everything else is
+ *    `Thing`. Both are outside Google's Product-feature validation entirely,
+ *    so neither can be flagged "invalid" for a feature never claimed. This
+ *    was tried the other way first (`offers` with no `price`, then `Product`
+ *    with no `offers`) and Search Console flagged both — see the comment atop
+ *    `generateProductSchema` for the full history if this gets revisited.
  * 5. Self-serving reviews are prohibited: never attach Review or
  *    AggregateRating to Organization / LocalBusiness / MedicalBusiness. Google
  *    will not render stars no matter how correct the markup is. Product-scoped
@@ -166,15 +173,28 @@ export function generateProductSchema(product: Product): Json {
    *
    * The catalogue publishes no prices, full stop, so there is no way to
    * satisfy this requirement honestly. Google also explicitly disallows
-   * placeholder values like "Contact for price" in the price field. Dropping
-   * `offers` withdraws from product-rich-result eligibility cleanly instead of
-   * claiming it and failing — Product + MedicalDevice still carry name,
-   * description, image, category, specs and the full clinical profile, which
-   * is what actually renders on the page.
+   * placeholder values like "Contact for price" in the price field.
    *
-   * If real prices are ever published, reintroduce `offers` with `price` and
-   * `priceCurrency` set from the same source the page displays — never before
-   * that source exists.
+   * That alone was not enough, though. Removing `offers` and leaving `@type`
+   * as `["Product", "MedicalDevice"]` traded one invalid-item cause for
+   * another: Google's Product validation requires the node to carry at least
+   * one of `offers`, `review` or `aggregateRating` the moment `"Product"`
+   * appears anywhere in `@type` — co-typing with MedicalDevice does not
+   * exempt it. Search Console flagged it again, same report, same message
+   * shape ("Either offers, review, or aggregateRating should be specified").
+   *
+   * We can supply none of the three honestly: no real prices, and inventing
+   * reviews or a rating is a harder line already drawn elsewhere in this file
+   * (self-serving Review/AggregateRating on Organization or LocalBusiness is
+   * explicitly prohibited — see the module doc comment). So `"Product"` is
+   * dropped from `@type` entirely. The node is `MedicalDevice` alone; it
+   * still carries name, description, image, category, specs and the full
+   * clinical profile, which is what actually renders on the page — it just no
+   * longer enrols in a rich-result feature it can never validate against.
+   *
+   * If real prices or genuine third-party reviews are ever available, restore
+   * `"Product"` to `@type` and add whichever of `offers`/`review`/
+   * `aggregateRating` is now honestly true — never before then.
    */
   const med = product.medical;
 
@@ -194,10 +214,8 @@ export function generateProductSchema(product: Product): Json {
 
   const schema: Json = {
     "@context": "https://schema.org",
-    // Product stays primary so the Offer keeps its rich-result eligibility;
-    // MedicalDevice is layered onto the same node rather than split into a
-    // second entity, because it is one thing, not two.
-    "@type": ["Product", "MedicalDevice"],
+    // MedicalDevice alone — see the note above on why "Product" is not here.
+    "@type": "MedicalDevice",
     "@id": `${url}#product`,
     name: product.name,
     description: product.summary,
@@ -260,12 +278,20 @@ export function generateProductSchema(product: Product): Json {
 /**
  * Care essentials.
  *
- * Multi-typed as Product + MedicalDevice only where the item genuinely is a
- * regulated device with clinical risk (catheters, feeding tubes, PPE). Gloves
- * and a Foley catheter are both "consumables" commercially, but only one of
- * them has contraindications — typing adult diapers as a MedicalDevice with an
- * empty clinical profile would be padding the markup, so items without a
- * `medical` profile stay plain Products.
+ * Typed `MedicalDevice` where the item genuinely is a regulated device with
+ * clinical risk (catheters, feeding tubes, PPE). Gloves and a Foley catheter
+ * are both "consumables" commercially, but only one of them has
+ * contraindications — typing adult diapers as a MedicalDevice with an empty
+ * clinical profile would be padding the markup, so items without a `medical`
+ * profile fall back to `Thing`.
+ *
+ * `"Product"` is never emitted — same reasoning as `generateProductSchema`:
+ * Google's Product validation requires `offers`, `review` or
+ * `aggregateRating` the instant `"Product"` is in `@type`, and this catalogue
+ * has none of the three to offer honestly. `Thing` is schema.org's root type,
+ * always valid, and is not enrolled in any Google rich-result feature, so a
+ * non-device consumable described only by name/description/image/variants
+ * can never be flagged "invalid" for a feature it never claimed.
  */
 export function generateCareEssentialSchema(item: CareEssential): Json {
   const url = absoluteUrl(`/care-essentials/${item.slug}`, SITE_URL);
@@ -276,7 +302,7 @@ export function generateCareEssentialSchema(item: CareEssential): Json {
 
   const schema: Json = {
     "@context": "https://schema.org",
-    "@type": med ? ["Product", "MedicalDevice"] : "Product",
+    "@type": med ? "MedicalDevice" : "Thing",
     "@id": `${url}#product`,
     name: item.name,
     description: item.summary,
@@ -289,9 +315,10 @@ export function generateCareEssentialSchema(item: CareEssential): Json {
       name: v.label,
       value: v.value,
     })),
-    // No `offers` — see the note in generateProductSchema. Consumables are
-    // unpriced same as equipment, so an Offer here would fail the same
-    // required-`price` validation and produce the same GSC "invalid item".
+    // No `offers`, no "Product" in @type — see the module doc and the note in
+    // generateProductSchema. Consumables are unpriced same as equipment, and
+    // claiming Product eligibility without offers/review/aggregateRating is
+    // exactly what caused the GSC "invalid item" this file now avoids.
   };
 
   if (med) {
