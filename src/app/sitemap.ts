@@ -24,7 +24,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
     .sort((a, b) => b.getTime() - a.getTime())[0];
 
   const staticRoutes: MetadataRoute.Sitemap = [
-    { url: `${SITE_URL}/`, lastModified: newestProductChange },
+    // No trailing slash: Next's metadata resolution renders the homepage's
+    // <link rel="canonical"> as `SITE_URL` bare (verified against the live
+    // site), not `SITE_URL/`. A sitemap `<loc>` that disagreed with the
+    // page's own canonical was the one inconsistency found in a full sweep
+    // of every URL in this file — everything else self-referenced correctly.
+    { url: SITE_URL, lastModified: newestProductChange },
     { url: `${SITE_URL}/products`, lastModified: newestProductChange },
     { url: `${SITE_URL}/care-essentials` },
     ...getAllCareEssentials().map((item) => ({
