@@ -13,9 +13,9 @@ import {
   CARE_SERVICES,
   CONTACT,
   PARENT_STATS,
-  SERVICE_AREAS,
   telLink,
 } from "@/lib/constants";
+import { NCR_PINCODE_COUNT, SERVICE_AREAS } from "@/lib/service-areas";
 import { generateFAQSchema } from "@/lib/schema-generator";
 import { buildMetadata } from "@/lib/seo";
 import type { Faq } from "@/lib/types";
@@ -23,7 +23,7 @@ import type { Faq } from "@/lib/types";
 export const metadata = buildMetadata({
   title: "Home Nursing & Care Services — Encone Care",
   description:
-    "Verified nurses, attendants, physiotherapists and doctor visits at home across Delhi NCR, Lucknow, Kanpur, Prayagraj and Varanasi — from Encone Care.",
+    "Verified nurses, attendants, physiotherapists and doctor visits at home across Delhi NCR — Delhi, Noida, Greater Noida, Gurgaon, Ghaziabad and Faridabad — from Encone Care.",
   path: "/home-care",
 });
 
@@ -50,19 +50,19 @@ const FAQS: Faq[] = [
       "Every nurse passes a four-step check before placement: credentials verified with the nursing councils, police clearance, a live in-person clinical skills test, and reference calls to two previous employers. Roughly 30% of applicants are rejected.",
   },
   {
-    question: "What does home nursing cost in Delhi?",
+    question: "What does home nursing cost in Delhi NCR?",
     answer:
       "It depends on whether you need a care taker or a GNM/B.Sc. nurse, whether the shift is 12 or 24 hours, and which city you are in — rates outside Delhi NCR are lower. Call us and we will quote for your actual requirement rather than a rate card that fits nobody.",
   },
   {
     question: "Which cities do you cover for home nursing?",
     answer:
-      "Delhi, Noida, Greater Noida, Gurgaon, Ghaziabad and Faridabad across the NCR, plus Lucknow, Kanpur, Prayagraj and Varanasi in Uttar Pradesh — over 180 neighbourhoods in total, staffed 24/7.",
+      "Delhi NCR: Delhi, Noida, Greater Noida, Gurgaon, Ghaziabad and Faridabad. Every pincode we cover is listed on its city page under Locations.",
   },
 ];
 
 export default function HomeCarePage() {
-  const cities = SERVICE_AREAS.filter((a) => a.areaCount);
+  const cities = SERVICE_AREAS;
 
   return (
     <>
@@ -99,7 +99,7 @@ export default function HomeCarePage() {
                 {BRAND.parent.name}
               </a>
               , which has been placing verified nurses, attendants and
-              physiotherapists in homes across Delhi NCR and Uttar Pradesh since{" "}
+              physiotherapists in homes across Delhi NCR since{" "}
               {BRAND.operatingSince}. When a patient comes home from hospital, the
               bed is the easy part — this is the other half.
             </p>
@@ -220,27 +220,32 @@ export default function HomeCarePage() {
           <DisplayHeading
             align="left"
             className="mt-8 max-w-3xl"
-            lead="Nine cities."
-            trail="Over 180 neighbourhoods."
+            lead="Delhi NCR."
+            trail={`${NCR_PINCODE_COUNT} pincodes, six cities.`}
           />
           <ul className="mt-12 grid gap-px overflow-hidden rounded-2xl border border-line-strong bg-[color:var(--color-line)] sm:grid-cols-2 lg:grid-cols-3">
             {cities.map((city) => (
-              <li
-                key={city.slug}
-                className="flex items-baseline justify-between gap-4 bg-surface-raised/40 px-6 py-5"
-              >
-                <span className="text-sm font-semibold text-text-primary">
-                  {city.name}
-                </span>
-                <span className="text-xs text-text-muted">
-                  {city.areaCount} areas
-                </span>
+              <li key={city.slug} className="bg-surface-raised/40">
+                <Link
+                  href={`/locations/${city.slug}`}
+                  className="flex items-baseline justify-between gap-4 px-6 py-5 transition hover:bg-surface-raised"
+                >
+                  <span className="text-sm font-semibold text-text-primary">
+                    {city.name}
+                  </span>
+                  <span className="text-xs text-text-muted">
+                    {city.pincodes.length} pincodes
+                  </span>
+                </Link>
               </li>
             ))}
           </ul>
           <p className="mt-6 text-sm text-text-muted">
-            Equipment delivery is live in Delhi. Elsewhere the care network is
-            on the ground and equipment is arranged on request.
+            Nursing and equipment are both arranged across these six cities.{" "}
+            <Link href="/locations" className="font-semibold text-brand-green underline-offset-4 hover:underline">
+              Check your pincode
+            </Link>
+            .
           </p>
         </section>
 

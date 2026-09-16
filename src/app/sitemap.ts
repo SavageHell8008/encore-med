@@ -2,7 +2,7 @@ import type { MetadataRoute } from "next";
 import { getAllCareEssentials } from "@/data/care-essentials";
 import { getAllProducts } from "@/data/products";
 import { CATEGORIES } from "@/data/taxonomy";
-import { LIVE_SERVICE_AREAS, SITE_URL } from "@/lib/constants";
+import { NCR_CITIES, SITE_URL } from "@/lib/constants";
 
 /**
  * Only canonical, indexable URLs belong here.
@@ -58,10 +58,13 @@ export default function sitemap(): MetadataRoute.Sitemap {
     lastModified: new Date(product.updatedAt),
   }));
 
-  const locationRoutes: MetadataRoute.Sitemap = LIVE_SERVICE_AREAS.map((area) => ({
-    url: `${SITE_URL}/locations/${area.slug}`,
-    lastModified: newestProductChange,
-  }));
+  const locationRoutes: MetadataRoute.Sitemap = [
+    { url: `${SITE_URL}/locations`, lastModified: newestProductChange },
+    ...NCR_CITIES.map((area) => ({
+      url: `${SITE_URL}/locations/${area.slug}`,
+      lastModified: newestProductChange,
+    })),
+  ];
 
   return [...staticRoutes, ...categoryRoutes, ...productRoutes, ...locationRoutes];
 }

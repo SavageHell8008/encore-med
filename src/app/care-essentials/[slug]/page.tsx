@@ -35,7 +35,7 @@ export async function generateMetadata({ params }: { params: Params }) {
 
   return buildMetadata({
     title: `${item.name} — Sizes & Safety`,
-    description: `${item.summary} Supplied in Delhi with sizing guidance. Get the best quote.`,
+    description: `${item.summary} Supplied across Delhi NCR with sizing guidance. Get the best quote.`,
     path: `/care-essentials/${item.slug}`,
     images: [
       {

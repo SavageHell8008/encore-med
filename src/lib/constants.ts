@@ -24,7 +24,7 @@ export const BRAND = {
   },
   tagline: "Your Health, Our Priority",
   description:
-    "Rent or buy certified medical equipment — hospital beds, oxygen concentrators, BiPAP and complete home ICU setups — with published pricing, documented sanitisation and expert installation across Delhi.",
+    "Rent or buy medical equipment across Delhi NCR — hospital beds, oxygen concentrators, BiPAP and complete home ICU setups — from our own fleet, with documented sanitisation, technician installation and honest quotes.",
   /** Verified: "since 2022" on enconecare.in. */
   operatingSince: 2022,
 } as const;
@@ -76,7 +76,7 @@ export const CONTACT = {
 export const PARENT_STATS = [
   { value: "500+", label: "Families served since 2022" },
   { value: "100+", label: "Qualified nurses on the network" },
-  { value: "24×7", label: "Availability across Delhi NCR & UP" },
+  { value: "24×7", label: "Availability across Delhi NCR" },
   { value: "< 4 hrs", label: "Equipment delivered and installed" },
 ] as const;
 
@@ -94,47 +94,36 @@ export function telLink(): string {
 /*  Geography                                                                 */
 /* -------------------------------------------------------------------------- */
 
-export type ServiceArea = {
-  slug: string;
-  name: string;
-  region: string;
-  /**
-   * `live`         — Encone Care delivers and installs equipment here today.
-   * `care-network` — Encone Care's nursing network operates here (verified from
-   *                  enconecare.in), and equipment can be arranged on request,
-   *                  but same-day equipment delivery is not yet promised.
-   */
-  status: "live" | "care-network";
-  /** Verified count of neighbourhoods the parent lists for this city. */
-  areaCount?: number;
-  postalCodePrefixes?: string[];
-};
-
 /**
- * `15-local-seo.md`: a service-area business defines coverage by named city and
- * postal code, not a radius. The `care-network` tier exists so the parent's real
- * footprint can be shown honestly without implying an equipment delivery promise
- * we cannot keep — one broken delivery commitment costs more trust than the
- * extra city listings are worth (`09-trust-psychology.md`).
+ * The six Delhi NCR cities equipment is delivered to — and nowhere else.
+ *
+ * Deliberately lightweight: this file is imported by client components (the
+ * enquiry form), so it must not pull in the pincode dataset. The full model —
+ * verified pincodes, localities, local notes — lives in
+ * `src/lib/service-areas.ts`, which only server components import.
+ *
+ * New Delhi is not a separate entry: every New Delhi pincode is a Delhi
+ * (110xxx) pincode, so its page duplicated Delhi's with the name swapped.
+ * `/locations/new-delhi` 308-redirects to `/locations/delhi` (next.config.ts).
  */
-export const SERVICE_AREAS: ServiceArea[] = [
-  { slug: "delhi", name: "Delhi", region: "Delhi", status: "live", areaCount: 35, postalCodePrefixes: ["110"] },
-  { slug: "new-delhi", name: "New Delhi", region: "Delhi", status: "live", postalCodePrefixes: ["110"] },
-  { slug: "noida", name: "Noida", region: "Uttar Pradesh", status: "care-network", areaCount: 32 },
-  { slug: "greater-noida", name: "Greater Noida", region: "Uttar Pradesh", status: "care-network", areaCount: 12 },
-  { slug: "gurgaon", name: "Gurgaon", region: "Haryana", status: "care-network", areaCount: 32 },
-  { slug: "ghaziabad", name: "Ghaziabad", region: "Uttar Pradesh", status: "care-network", areaCount: 11 },
-  { slug: "faridabad", name: "Faridabad", region: "Haryana", status: "care-network", areaCount: 9 },
-  { slug: "lucknow", name: "Lucknow", region: "Uttar Pradesh", status: "care-network", areaCount: 20 },
-  { slug: "kanpur", name: "Kanpur", region: "Uttar Pradesh", status: "care-network", areaCount: 10 },
-  { slug: "prayagraj", name: "Prayagraj", region: "Uttar Pradesh", status: "care-network", areaCount: 10 },
-  { slug: "varanasi", name: "Varanasi", region: "Uttar Pradesh", status: "care-network", areaCount: 10 },
-];
+export const NCR_CITIES = [
+  { slug: "delhi", name: "Delhi", state: "Delhi" },
+  { slug: "noida", name: "Noida", state: "Uttar Pradesh" },
+  { slug: "greater-noida", name: "Greater Noida", state: "Uttar Pradesh" },
+  { slug: "gurgaon", name: "Gurgaon", alsoKnownAs: "Gurugram", state: "Haryana" },
+  { slug: "ghaziabad", name: "Ghaziabad", state: "Uttar Pradesh" },
+  { slug: "faridabad", name: "Faridabad", state: "Haryana" },
+] as const;
 
-export const LIVE_SERVICE_AREAS = SERVICE_AREAS.filter((a) => a.status === "live");
-export const CARE_NETWORK_AREAS = SERVICE_AREAS.filter((a) => a.status === "care-network");
+export type NcrCitySlug = (typeof NCR_CITIES)[number]["slug"];
 
-export const CITY_OPTIONS = SERVICE_AREAS.map((a) => a.name);
+/** "Delhi, Noida and Faridabad" */
+export function formatCityList(names: readonly string[]): string {
+  if (names.length <= 1) return names.join("");
+  return `${names.slice(0, -1).join(", ")} and ${names[names.length - 1]}`;
+}
+
+export const CITY_OPTIONS = NCR_CITIES.map((c) => c.name);
 
 /* -------------------------------------------------------------------------- */
 /*  Encone Care services (verified from enconecare.in)                        */

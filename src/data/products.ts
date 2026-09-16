@@ -1,4 +1,5 @@
 import { profile } from "@/data/medical-profiles";
+import { NCR_CITIES } from "@/lib/constants";
 import type { Product, ProductImage } from "@/lib/types";
 
 /**
@@ -32,8 +33,12 @@ function img(
   return { src: `/Equipment/${folder}/${file}`, alt, kind, ...SQUARE };
 }
 
-/** Equipment delivery is live in Delhi only; see SERVICE_AREAS. */
-const DELHI = [{ city: "delhi", sameDay: true }, { city: "new-delhi", sameDay: true }];
+/**
+ * Every item is delivered across all six Delhi NCR cities; see NCR_CITIES.
+ * Derived rather than hand-listed so a city added or removed there cannot
+ * leave a location page silently showing no products.
+ */
+const DELHI = NCR_CITIES.map((city) => ({ city: city.slug, sameDay: true }));
 
 const REVIEWER = {
   name: "Encone Care clinical team",
@@ -96,7 +101,7 @@ export const PRODUCTS: Product[] = [
       { question: "Is a manual hospital bed good enough, or should I get electric?", answer: "Manual is sufficient for most home care. Choose electric when the head of the bed is adjusted many times a day, when the patient wants to adjust it themselves, or when the carer is elderly or has a back problem of their own." },
       { question: "Does the bed come with a mattress?", answer: "Yes, a waterproof-covered foam mattress is included. It is a sleeping surface, not a pressure-relieving one — bedbound patients also need an alternating-pressure air mattress." },
       { question: "Can I rent a hospital bed for one month?", answer: "Yes. Rental is the usual choice for recovery periods of a few weeks to a few months. Call us and we will tell you honestly whether renting or buying works out better for your expected duration." },
-      { question: "How long does delivery and installation take?", answer: "Within four hours across Delhi in most cases. The technician assembles the bed in the room, fits the rails and mattress, and shows whoever is caring for the patient how to operate everything before leaving." },
+      { question: "How long does delivery and installation take?", answer: "Usually within four hours across Delhi NCR — we confirm the time for your pincode when you call. The technician assembles the bed in the room, fits the rails and mattress, and shows whoever is caring for the patient how to operate everything before leaving." },
     ],
     offerMode: "rent-or-buy",
     images: [img("rental", "Hospital_Bed.jpg", "Manual hospital bed with adjustable backrest, side rails and locking castors")],

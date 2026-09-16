@@ -31,7 +31,8 @@
  */
 
 import { getCategory } from "@/data/taxonomy";
-import { BRAND, CONTACT, LIVE_SERVICE_AREAS, SITE_URL } from "@/lib/constants";
+import { BRAND, CONTACT, SITE_URL } from "@/lib/constants";
+import { SERVICE_AREAS, getServiceArea, type ServiceArea } from "@/lib/service-areas";
 import type { CareEssential, Faq, Product } from "@/lib/types";
 import { absoluteUrl } from "@/lib/utils";
 
@@ -101,13 +102,17 @@ export function generateWebSiteSchema(): Json {
  * address is deliberately NOT published — an SAB must hide it. Service areas
  * are expressed by named city, not a radius.
  */
-export function generateMedicalBusinessSchema(opts?: {
-  citySlug?: string;
-  cityName?: string;
-}): Json {
-  const areas = opts?.cityName
-    ? [{ "@type": "City", name: opts.cityName }]
-    : LIVE_SERVICE_AREAS.map((a) => ({ "@type": "City", name: a.name }));
+export function generateMedicalBusinessSchema(opts?: { citySlug?: string }): Json {
+  const city = opts?.citySlug ? getServiceArea(opts.citySlug) : undefined;
+
+  const asCity = (a: ServiceArea) => ({
+    "@type": "City",
+    name: a.name,
+    ...(a.alsoKnownAs ? { alternateName: a.alsoKnownAs } : {}),
+    containedInPlace: { "@type": "State", name: a.state },
+  });
+
+  const areas = city ? [asCity(city)] : SERVICE_AREAS.map(asCity);
 
   return {
     "@context": "https://schema.org",
@@ -121,11 +126,18 @@ export function generateMedicalBusinessSchema(opts?: {
     telephone: CONTACT.phone,
     email: CONTACT.email,
     parentOrganization: { "@id": ORG_ID },
-    // Service-area business: region only, no street address.
+    // Service-area business: locality and region only, no street address.
+    // Always the registered office, on every page. This used to take the
+    // city page's name as addressLocality while keeping addressRegion
+    // "Delhi" — asserting places like "Gurgaon, Delhi" that do not exist, and
+    // a different business address per page, which breaks the NAP
+    // consistency local ranking depends on. The city served goes in
+    // areaServed instead.
     address: {
       "@type": "PostalAddress",
-      addressLocality: opts?.cityName ?? CONTACT.registeredOffice.city,
+      addressLocality: CONTACT.registeredOffice.city,
       addressRegion: CONTACT.registeredOffice.region,
+      postalCode: CONTACT.registeredOffice.postalCode,
       addressCountry: "IN",
     },
     areaServed: areas,

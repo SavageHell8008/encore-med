@@ -20,7 +20,8 @@ import { JsonLd } from "@/components/JsonLd";
 import { Container } from "@/components/ui/Container";
 import { getProduct, getAllProducts, getRelatedProducts } from "@/data/products";
 import { getCategory } from "@/data/taxonomy";
-import { SERVICE_AREAS, whatsappLink } from "@/lib/constants";
+import { whatsappLink } from "@/lib/constants";
+import { SERVICE_AREAS } from "@/lib/service-areas";
 import {
   generateFAQSchema,
   generateProductSchema,
@@ -388,8 +389,11 @@ export default async function ProductPage({ params }: { params: Params }) {
                 ))}
               </ul>
               <p className="mt-4 text-sm text-text-muted">
-                Outside Delhi? We are expanding across the NCR and Uttar Pradesh —
-                call us and we will tell you honestly whether we can reach you.
+                We deliver across Delhi NCR only.{" "}
+                <Link href="/locations" className="font-semibold text-brand-green underline-offset-4 hover:underline">
+                  Check your pincode
+                </Link>
+                , or call us and we will tell you honestly whether we can reach you.
               </p>
             </section>
           </div>

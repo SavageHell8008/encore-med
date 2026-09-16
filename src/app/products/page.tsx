@@ -26,9 +26,9 @@ export async function generateMetadata({ searchParams }: { searchParams: SearchP
   const isFiltered = Boolean(category || need || intent || sort);
 
   return buildMetadata({
-    title: "All Medical Equipment — Rent or Buy in Delhi",
+    title: "All Medical Equipment — Rent or Buy in Delhi NCR",
     description:
-      "Every item Encone Care rents and sells in Delhi — hospital beds, oxygen, BiPAP, monitors, pumps and mobility. Filter by equipment type or by what the patient is struggling with, and ask for a quote.",
+      "Every item Encone Care rents and sells across Delhi NCR — hospital beds, oxygen, BiPAP, monitors, pumps and mobility. Filter by equipment type or by what the patient is struggling with, and ask for a quote.",
     path: "/products",
     // Filtered permutations are thin duplicates of this page. They stay
     // crawlable (follow) so link equity flows to the products, but out of the
