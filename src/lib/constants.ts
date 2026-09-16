@@ -292,7 +292,7 @@ export const FOOTER_LINKS = {
     title: "Equipment",
     links: [
       { href: "/categories/hospital-beds", label: "Hospital Beds" },
-      { href: "/categories/oxygen-concentrators", label: "Oxygen Concentrators" },
+      { href: "/categories/oxygen-therapy", label: "Oxygen Concentrators" },
       { href: "/categories/bipap-cpap", label: "BiPAP & CPAP" },
       { href: "/categories/wheelchairs", label: "Wheelchairs & Mobility" },
       { href: "/categories/patient-monitors", label: "Patient Monitors" },

@@ -94,8 +94,11 @@ async function deliverLead(lead: Record<string, unknown>) {
   const chatIdsRaw = process.env.TELEGRAM_CHAT_ID;
 
   if (!token || !chatIdsRaw) {
-    // Same visibility the stub always had, so local dev without secrets set
-    // still shows the lead rather than failing outright.
+    // A silent success in production would lose the lead; the form then tells the visitor to call.
+    if (process.env.NODE_ENV === "production") {
+      console.error("[inquiry] TELEGRAM_BOT_TOKEN/TELEGRAM_CHAT_ID missing in production", lead);
+      throw new Error("Telegram is not configured");
+    }
     console.info("[inquiry] TELEGRAM_BOT_TOKEN/TELEGRAM_CHAT_ID not set — logging only", {
       ...lead,
       receivedAt: new Date().toISOString(),
