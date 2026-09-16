@@ -62,7 +62,7 @@ export default function OpengraphImage() {
               maxWidth: 940,
             }}
           >
-            Medical equipment on rent &amp; sale in Delhi
+            Medical equipment on rent &amp; sale in Delhi NCR
           </div>
           <div
             style={{

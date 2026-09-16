@@ -8,10 +8,17 @@
  * 1. Organization goes on the home and about pages only, not sitewide. Repeating
  *    it on every URL adds bytes and no signal.
  * 2. BreadcrumbList goes everywhere below the root.
- * 3. Product is always the primary @type. `MedicalDevice` has no Google
- *    rich-result support, so it is layered as a secondary type, never alone.
- * 4. A rentable item needs TWO Offers — `businessFunction: LeaseOut` for rental
- *    and `Sell` for purchase. One Offer cannot express both.
+ * 3. `"Product"` is never emitted, on anything, anywhere in this file. Google
+ *    requires `offers`, `review` or `aggregateRating` the instant `"Product"`
+ *    appears in `@type` — co-typing with MedicalDevice does not exempt it —
+ *    and this catalogue has none of the three to offer honestly (no real
+ *    prices, no fabricated reviews per point 5 below). Equipment and regulated
+ *    care-essentials are typed `MedicalDevice` alone; everything else is
+ *    `Thing`. Both are outside Google's Product-feature validation entirely,
+ *    so neither can be flagged "invalid" for a feature never claimed. This
+ *    was tried the other way first (`offers` with no `price`, then `Product`
+ *    with no `offers`) and Search Console flagged both — see the comment atop
+ *    `generateProductSchema` for the full history if this gets revisited.
  * 5. Self-serving reviews are prohibited: never attach Review or
  *    AggregateRating to Organization / LocalBusiness / MedicalBusiness. Google
  *    will not render stars no matter how correct the markup is. Product-scoped
@@ -24,7 +31,8 @@
  */
 
 import { getCategory } from "@/data/taxonomy";
-import { BRAND, CONTACT, LIVE_SERVICE_AREAS, SITE_URL } from "@/lib/constants";
+import { BRAND, CONTACT, SITE_URL } from "@/lib/constants";
+import { SERVICE_AREAS, getServiceArea, type ServiceArea } from "@/lib/service-areas";
 import type { CareEssential, Faq, Product } from "@/lib/types";
 import { absoluteUrl } from "@/lib/utils";
 
@@ -94,13 +102,17 @@ export function generateWebSiteSchema(): Json {
  * address is deliberately NOT published — an SAB must hide it. Service areas
  * are expressed by named city, not a radius.
  */
-export function generateMedicalBusinessSchema(opts?: {
-  citySlug?: string;
-  cityName?: string;
-}): Json {
-  const areas = opts?.cityName
-    ? [{ "@type": "City", name: opts.cityName }]
-    : LIVE_SERVICE_AREAS.map((a) => ({ "@type": "City", name: a.name }));
+export function generateMedicalBusinessSchema(opts?: { citySlug?: string }): Json {
+  const city = opts?.citySlug ? getServiceArea(opts.citySlug) : undefined;
+
+  const asCity = (a: ServiceArea) => ({
+    "@type": "City",
+    name: a.name,
+    ...(a.alsoKnownAs ? { alternateName: a.alsoKnownAs } : {}),
+    containedInPlace: { "@type": "State", name: a.state },
+  });
+
+  const areas = city ? [asCity(city)] : SERVICE_AREAS.map(asCity);
 
   return {
     "@context": "https://schema.org",
@@ -114,11 +126,18 @@ export function generateMedicalBusinessSchema(opts?: {
     telephone: CONTACT.phone,
     email: CONTACT.email,
     parentOrganization: { "@id": ORG_ID },
-    // Service-area business: region only, no street address.
+    // Service-area business: locality and region only, no street address.
+    // Always the registered office, on every page. This used to take the
+    // city page's name as addressLocality while keeping addressRegion
+    // "Delhi" — asserting places like "Gurgaon, Delhi" that do not exist, and
+    // a different business address per page, which breaks the NAP
+    // consistency local ranking depends on. The city served goes in
+    // areaServed instead.
     address: {
       "@type": "PostalAddress",
-      addressLocality: opts?.cityName ?? CONTACT.registeredOffice.city,
+      addressLocality: CONTACT.registeredOffice.city,
       addressRegion: CONTACT.registeredOffice.region,
+      postalCode: CONTACT.registeredOffice.postalCode,
       addressCountry: "IN",
     },
     areaServed: areas,
@@ -151,53 +170,44 @@ export function generateBreadcrumbSchema(
 export function generateProductSchema(product: Product): Json {
   const url = absoluteUrl(`/products/${product.slug}`, SITE_URL);
   const laySynonyms = getCategory(product.categorySlug)?.laySynonyms ?? [];
-  const availability = product.inStock
-    ? "https://schema.org/InStock"
-    : "https://schema.org/OutOfStock";
-
-  const areaServed = LIVE_SERVICE_AREAS.map((a) => ({ "@type": "City", name: a.name }));
 
   /**
-   * Offers carry no price.
+   * No `offers` node at all — not even an unpriced one.
    *
-   * The catalogue publishes none, so emitting one here would be marking up
-   * content that does not exist on the page — the same violation as inventing
-   * a rating. `businessFunction` still distinguishes Sell from LeaseOut, which
-   * is the genuinely useful signal: it tells a search engine this item can be
-   * rented, not just bought.
+   * `price` is a required property of Offer the moment `offers` is present
+   * (https://developers.google.com/search/docs/appearance/structured-data/product).
+   * An earlier version of this file emitted `offers` with `priceCurrency` but
+   * no `price`, on the theory that `businessFunction` alone (Sell vs LeaseOut)
+   * was worth the markup. It was not: Search Console's Product snippets and
+   * Merchant listings reports both flagged every page as "1 invalid item
+   * detected", because an incomplete Offer is worse than no Offer — it claims
+   * eligibility for a rich result and then fails validation.
    *
-   * Accepted cost: without `price` or `priceSpecification`, these pages are not
-   * eligible for Google's price-carrying product rich results. That follows
-   * from the pricing decision, not from a modelling mistake.
+   * The catalogue publishes no prices, full stop, so there is no way to
+   * satisfy this requirement honestly. Google also explicitly disallows
+   * placeholder values like "Contact for price" in the price field.
+   *
+   * That alone was not enough, though. Removing `offers` and leaving `@type`
+   * as `["Product", "MedicalDevice"]` traded one invalid-item cause for
+   * another: Google's Product validation requires the node to carry at least
+   * one of `offers`, `review` or `aggregateRating` the moment `"Product"`
+   * appears anywhere in `@type` — co-typing with MedicalDevice does not
+   * exempt it. Search Console flagged it again, same report, same message
+   * shape ("Either offers, review, or aggregateRating should be specified").
+   *
+   * We can supply none of the three honestly: no real prices, and inventing
+   * reviews or a rating is a harder line already drawn elsewhere in this file
+   * (self-serving Review/AggregateRating on Organization or LocalBusiness is
+   * explicitly prohibited — see the module doc comment). So `"Product"` is
+   * dropped from `@type` entirely. The node is `MedicalDevice` alone; it
+   * still carries name, description, image, category, specs and the full
+   * clinical profile, which is what actually renders on the page — it just no
+   * longer enrols in a rich-result feature it can never validate against.
+   *
+   * If real prices or genuine third-party reviews are ever available, restore
+   * `"Product"` to `@type` and add whichever of `offers`/`review`/
+   * `aggregateRating` is now honestly true — never before then.
    */
-  const offers: Json[] = [
-    {
-      "@type": "Offer",
-      "@id": `${url}#offer-sell`,
-      businessFunction: "https://schema.org/Sell",
-      name: `Buy ${product.name}`,
-      availability,
-      priceCurrency: "INR",
-      url,
-      seller: { "@id": ORG_ID },
-      areaServed,
-    },
-  ];
-
-  if (product.offerMode === "rent-or-buy") {
-    offers.push({
-      "@type": "Offer",
-      "@id": `${url}#offer-lease`,
-      businessFunction: "https://schema.org/LeaseOut",
-      name: `Rent ${product.name}`,
-      availability,
-      priceCurrency: "INR",
-      url,
-      seller: { "@id": ORG_ID },
-      areaServed,
-    });
-  }
-
   const med = product.medical;
 
   // https://schema.org/MedicalDevice — MedicalEntity supertype properties.
@@ -216,10 +226,8 @@ export function generateProductSchema(product: Product): Json {
 
   const schema: Json = {
     "@context": "https://schema.org",
-    // Product stays primary so the Offer keeps its rich-result eligibility;
-    // MedicalDevice is layered onto the same node rather than split into a
-    // second entity, because it is one thing, not two.
-    "@type": ["Product", "MedicalDevice"],
+    // MedicalDevice alone — see the note above on why "Product" is not here.
+    "@type": "MedicalDevice",
     "@id": `${url}#product`,
     name: product.name,
     description: product.summary,
@@ -274,11 +282,6 @@ export function generateProductSchema(product: Product): Json {
     },
   };
 
-  // A single Offer stays a bare node; two are emitted as a plain array rather
-  // than wrapped in AggregateOffer, whose whole purpose is lowPrice/highPrice —
-  // required properties we have no values for.
-  schema.offers = offers.length === 1 ? offers[0] : offers;
-
   return schema;
 }
 
@@ -287,12 +290,20 @@ export function generateProductSchema(product: Product): Json {
 /**
  * Care essentials.
  *
- * Multi-typed as Product + MedicalDevice only where the item genuinely is a
- * regulated device with clinical risk (catheters, feeding tubes, PPE). Gloves
- * and a Foley catheter are both "consumables" commercially, but only one of
- * them has contraindications — typing adult diapers as a MedicalDevice with an
- * empty clinical profile would be padding the markup, so items without a
- * `medical` profile stay plain Products.
+ * Typed `MedicalDevice` where the item genuinely is a regulated device with
+ * clinical risk (catheters, feeding tubes, PPE). Gloves and a Foley catheter
+ * are both "consumables" commercially, but only one of them has
+ * contraindications — typing adult diapers as a MedicalDevice with an empty
+ * clinical profile would be padding the markup, so items without a `medical`
+ * profile fall back to `Thing`.
+ *
+ * `"Product"` is never emitted — same reasoning as `generateProductSchema`:
+ * Google's Product validation requires `offers`, `review` or
+ * `aggregateRating` the instant `"Product"` is in `@type`, and this catalogue
+ * has none of the three to offer honestly. `Thing` is schema.org's root type,
+ * always valid, and is not enrolled in any Google rich-result feature, so a
+ * non-device consumable described only by name/description/image/variants
+ * can never be flagged "invalid" for a feature it never claimed.
  */
 export function generateCareEssentialSchema(item: CareEssential): Json {
   const url = absoluteUrl(`/care-essentials/${item.slug}`, SITE_URL);
@@ -303,7 +314,7 @@ export function generateCareEssentialSchema(item: CareEssential): Json {
 
   const schema: Json = {
     "@context": "https://schema.org",
-    "@type": med ? ["Product", "MedicalDevice"] : "Product",
+    "@type": med ? "MedicalDevice" : "Thing",
     "@id": `${url}#product`,
     name: item.name,
     description: item.summary,
@@ -316,18 +327,10 @@ export function generateCareEssentialSchema(item: CareEssential): Json {
       name: v.label,
       value: v.value,
     })),
-    // Consumables are sale-only and, like everything else here, unpriced.
-    offers: {
-      "@type": "Offer",
-      "@id": `${url}#offer-sell`,
-      businessFunction: "https://schema.org/Sell",
-      name: `Buy ${item.name}`,
-      availability: "https://schema.org/InStock",
-      priceCurrency: "INR",
-      url,
-      seller: { "@id": ORG_ID },
-      areaServed: LIVE_SERVICE_AREAS.map((a) => ({ "@type": "City", name: a.name })),
-    },
+    // No `offers`, no "Product" in @type — see the module doc and the note in
+    // generateProductSchema. Consumables are unpriced same as equipment, and
+    // claiming Product eligibility without offers/review/aggregateRating is
+    // exactly what caused the GSC "invalid item" this file now avoids.
   };
 
   if (med) {

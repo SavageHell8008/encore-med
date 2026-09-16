@@ -8,7 +8,7 @@ import { Container } from "@/components/ui/Container";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { getProductsByCategory } from "@/data/products";
 import { CATEGORIES, getCategory } from "@/data/taxonomy";
-import { LIVE_SERVICE_AREAS } from "@/lib/constants";
+import { NCR_CITIES, formatCityList } from "@/lib/constants";
 import {
   generateFAQSchema,
   generateItemListSchema,
@@ -41,7 +41,7 @@ export async function generateMetadata({ params }: { params: Params }) {
 
   return buildMetadata({
     title: category.headline,
-    description: `${category.description} ${offerFragment} Delivered and installed in Delhi within four hours — ask for a quote.`,
+    description: `${category.description} ${offerFragment} Delivered and installed across Delhi NCR — ask for a quote.`,
     path: `/categories/${category.slug}`,
   });
 }
@@ -57,8 +57,8 @@ export default async function CategoryPage({ params }: { params: Params }) {
   // sets do not cannibalise each other.
   const faqs: Faq[] = [
     {
-      question: `Where can I rent ${category.name.toLowerCase()} in Delhi?`,
-      answer: `Encone Care supplies ${category.name.toLowerCase()} on rent and for sale across ${LIVE_SERVICE_AREAS.map((a) => a.name).join(" and ")}, delivered and installed by a technician usually within four hours of a confirmed order.`,
+      question: `Where can I rent ${category.name.toLowerCase()} in Delhi NCR?`,
+      answer: `Encone Care supplies ${category.name.toLowerCase()} on rent and for sale across Delhi NCR — ${formatCityList(NCR_CITIES.map((c) => c.name))} — delivered and installed by a technician usually within four hours of a confirmed order.`,
     },
     {
       question: `How much do ${category.name.toLowerCase()} cost?`,
@@ -102,8 +102,8 @@ export default async function CategoryPage({ params }: { params: Params }) {
             <span className="text-glow text-brand-green">{category.name}</span>{" "}
             <span className="text-text-primary">
               {products.some((p) => p.offerMode === "rent-or-buy")
-                ? "on rent & sale in Delhi"
-                : "for sale in Delhi"}
+                ? "on rent & sale in Delhi NCR"
+                : "for sale in Delhi NCR"}
             </span>
           </h1>
           <p className="mt-5 max-w-2xl text-base leading-relaxed text-text-secondary">

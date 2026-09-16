@@ -50,6 +50,19 @@ const nextConfig: NextConfig = {
     optimizePackageImports: ["framer-motion", "lucide-react"],
   },
 
+  async redirects() {
+    return [
+      // New Delhi was a second location page whose pincodes are all Delhi
+      // (110xxx) pincodes — a duplicate of /locations/delhi with the name
+      // swapped. Permanent (308) so any indexed URL consolidates into Delhi.
+      {
+        source: "/locations/new-delhi",
+        destination: "/locations/delhi",
+        permanent: true,
+      },
+    ];
+  },
+
   async headers() {
     return [
       {

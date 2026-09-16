@@ -42,10 +42,15 @@ export const inquirySchema = z.object({
 
   /**
    * Honeypot. Real users never see or fill this; bots fill every input they
-   * find. Cheaper and more accessible than a CAPTCHA — and the safety rules
-   * bar us from solving CAPTCHAs anyway.
+   * find. Cheaper and more accessible than a CAPTCHA.
+   *
+   * Deliberately accepts any value. It used to be `.max(0)`, which rejected a
+   * filled honeypot at validation with a 400 naming `website` as the bad
+   * field — telling the bot exactly what to leave blank, and making the
+   * route's fake-success branch unreachable. The route checks this field
+   * after parsing and silently drops the submission instead.
    */
-  website: z.string().max(0).optional().or(z.literal("")),
+  website: z.string().max(500).optional(),
 });
 
 export type InquiryInput = z.input<typeof inquirySchema>;
