@@ -3,19 +3,18 @@ import { Breadcrumbs } from "@/components/layout/Breadcrumbs";
 import { InquiryForm } from "@/components/product/InquiryForm";
 import { JsonLd } from "@/components/JsonLd";
 import { Container } from "@/components/ui/Container";
-import { BRAND, CONTACT, SERVICE_AREAS, telLink, whatsappLink } from "@/lib/constants";
+import { BRAND, CONTACT, NCR_CITIES, formatCityList, telLink, whatsappLink } from "@/lib/constants";
 import { generateMedicalBusinessSchema } from "@/lib/schema-generator";
 import { buildMetadata } from "@/lib/seo";
 
 export const metadata = buildMetadata({
-  title: "Contact Encone Care — Delhi Medical Equipment",
+  title: "Contact Encone Care — Medical Equipment in Delhi NCR",
   description:
-    "Call, WhatsApp or send your details and someone who knows the equipment will call back. Same-day delivery and setup across Delhi, 8 AM to 10 PM.",
+    "Call, WhatsApp or send your details and someone who knows the equipment will call back. Delivery and installation across Delhi NCR, 8 AM to 10 PM.",
   path: "/contact",
 });
 
 export default function ContactPage() {
-  const live = SERVICE_AREAS.filter((a) => a.status === "live");
 
   return (
     <>
@@ -48,8 +47,9 @@ export default function ContactPage() {
                 Need something today?
               </h2>
               <p className="mt-2.5 text-sm leading-relaxed text-text-secondary">
-                Call. Do not use the form. Orders confirmed before 4 PM are
-                delivered and installed the same evening in Delhi.
+                Call. Do not use the form. Across Delhi NCR we usually deliver and
+                install within four hours of a confirmed order, and we will tell
+                you the time for your pincode on the call.
               </p>
               <a
                 href={telLink()}
@@ -110,7 +110,7 @@ export default function ContactPage() {
                   </>
                 )}
                 <br />
-                Serving {live.map((a) => a.name).join(" and ")}
+                Serving Delhi NCR: {formatCityList(NCR_CITIES.map((c) => c.name))}
                 <br />
                 <span className="text-text-muted">
                   We deliver to your address rather than operating a walk-in

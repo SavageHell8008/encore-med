@@ -51,8 +51,7 @@ export function HomeCareBand() {
               >
                 {BRAND.parent.name}
               </a>
-              , a home nursing service running in Delhi NCR and across Uttar
-              Pradesh since {BRAND.operatingSince}. So the machine and the person
+              , a home nursing service running across Delhi NCR since {BRAND.operatingSince}. So the machine and the person
               who knows how to use it come from the same phone call — and the
               nurse arriving at your door has already been through a four-step
               verification before we ever sent them.

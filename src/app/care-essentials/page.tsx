@@ -21,7 +21,7 @@ import type { Faq } from "@/lib/types";
 export const metadata = buildMetadata({
   title: "Care Essentials & Consumables",
   description:
-    "Foley catheters, Ryles feeding tubes, suction catheters, gloves, masks and adult diapers for home care in Delhi — with the sizing and safety guidance that should come with them.",
+    "Foley catheters, Ryles feeding tubes, suction catheters, gloves, masks and adult diapers for home care across Delhi NCR — with the sizing and safety guidance that should come with them.",
   path: "/care-essentials",
 });
 

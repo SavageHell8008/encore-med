@@ -1,5 +1,66 @@
 # Phase 1 — Build Handover
 
+> **Update, 22 Aug 2026 (Product snippets fix, take two).** The 14 Aug fix
+> (removing `offers` but keeping `@type: ["Product", "MedicalDevice"]`) traded
+> one invalid-item cause for another. Search Console re-flagged every page —
+> same reports, new message: *"Either 'offers', 'review', or 'aggregateRating'
+> should be specified"*. Google's Product validation requires one of those
+> three the instant `"Product"` appears in `@type` at all; co-typing with
+> MedicalDevice does not exempt it.
+>
+> We can supply none of the three honestly — no real prices (structural, see
+> `src/lib/types.ts`), and inventing reviews or a rating is a harder rule
+> already in force elsewhere in `schema-generator.ts` (self-serving
+> Review/AggregateRating on Organization/LocalBusiness is explicitly banned).
+>
+> **Actual fix: `"Product"` is no longer emitted anywhere, on anything.**
+> - Equipment (`generateProductSchema`): `@type` is `MedicalDevice` alone.
+> - Care essentials (`generateCareEssentialSchema`): `MedicalDevice` for the 5
+>   regulated devices, `Thing` for the 2 that aren't (adult diapers, catheter
+>   lubricant gel) — `Thing` because it's schema.org's root type, always valid,
+>   and isn't enrolled in any Google rich-result feature, so it can't be
+>   flagged invalid for one it never claimed.
+>
+> `validate-schema.mjs` now bans `"Product"` in `@type` on every node in both
+> catalogues, not just the primary one — verified against the actual built
+> HTML with a real JSON parse (not a text grep, which gave false positives on
+> minified single-line JSON-LD). **35/35 nodes valid, zero `Product` types,
+> zero `offers` keys**, confirmed by parsing every script tag in every built
+> page rather than trusting the validator's own report.
+>
+> This was two attempts in a row that each looked complete and each drew a new
+> Search Console flag. If this needs revisiting a third time, read the doc
+> comment at the top of `generateProductSchema` first — it has the full history
+> so the same two dead ends aren't retried.
+
+> **Update, 14 Aug 2026 (Product snippets / Merchant listings fix).** Search
+> Console's **Product snippets** and **Merchant listings** reports both showed
+> "1 invalid item detected". Cause: `generateProductSchema` and
+> `generateCareEssentialSchema` emitted an `offers` node with `priceCurrency`
+> and `businessFunction` but no `price` — and per Google's Product structured
+> data spec, `price` is required the instant `offers` is present. An incomplete
+> Offer is worse than none: it claims rich-result eligibility and then fails
+> validation, which is exactly what both reports were surfacing.
+>
+> Since the catalogue publishes no prices at all (a deliberate decision — see
+> the header of `src/lib/types.ts`) and Google explicitly disallows placeholder
+> values like "Contact for price", there was no way to complete the Offer
+> honestly. Fix: **`offers` is no longer emitted anywhere**, for either
+> catalogue. Product + MedicalDevice still carry name, description, image,
+> category, specs and the full clinical profile — everything that actually
+> renders on the page — they just no longer claim commerce-rich-result
+> eligibility they can't back.
+>
+> `scripts/validate-schema.mjs` now fails the build if `offers` appears on
+> *any* node in either catalogue (previously it required `offers` and only
+> checked that `price` was absent from it — the opposite of the current rule).
+> Verified: all 35 nodes valid, zero `offers` keys in the built HTML.
+>
+> **If real prices are ever published**, re-add `offers` with genuine `price`
+> + `priceCurrency` sourced from the same place the page displays the number,
+> and flip the corresponding check in `validate-schema.mjs` back around — never
+> ship one without the other.
+
 > **Update, 6 Aug 2026 (homepage vertical rhythm).** Every homepage section
 > carried `py-24 lg:py-32` — 128px top **and** bottom — so two adjacent sections
 > produced 256px of dead space before their own internal margins counted.

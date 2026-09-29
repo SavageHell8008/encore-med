@@ -60,7 +60,7 @@ export type Faq = {
 };
 
 export type AvailabilityArea = {
-  /** Matches a slug in SERVICE_AREAS. */
+  /** Matches a slug in NCR_CITIES. */
   city: string;
   /** Whether same-day delivery and installation is promised here. */
   sameDay: boolean;

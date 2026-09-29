@@ -88,7 +88,7 @@ export function buildProductMetadata(product: Product): Metadata {
 
   // No price in the description: the SERP snippet must not promise a figure the
   // page does not carry.
-  const description = `${product.summary} ${offerFragment} in Delhi — sanitised, technician-installed, delivered in under four hours. Get the best quote.`;
+  const description = `${product.summary} ${offerFragment} across Delhi NCR — sanitised, technician-installed, usually within four hours. Get the best quote.`;
 
   return buildMetadata({
     title,

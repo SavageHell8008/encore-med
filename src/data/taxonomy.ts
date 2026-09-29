@@ -10,7 +10,7 @@ export const CATEGORIES: Category[] = [
     slug: "hospital-beds",
     name: "Hospital Beds",
     laySynonyms: ["patient bed", "adjustable bed", "bed for bedridden patient"],
-    headline: "Hospital Beds on Rent & Sale in Delhi",
+    headline: "Hospital Beds on Rent & Sale in Delhi NCR",
     description:
       "Manual, semi-electric and fully electric beds for home care and facilities — delivered, assembled and demonstrated by a technician the same day.",
     icon: "bed",

@@ -4,10 +4,9 @@ import { Container } from "@/components/ui/Container";
 import { Logo } from "@/components/ui/Logo";
 import {
   BRAND,
-  CARE_NETWORK_AREAS,
   CONTACT,
   FOOTER_LINKS,
-  LIVE_SERVICE_AREAS,
+  NCR_CITIES,
   telLink,
   whatsappLink,
 } from "@/lib/constants";
@@ -161,15 +160,14 @@ export function Footer() {
           ))}
         </div>
 
-        {/* Coverage — contextual internal links, and honest about which tier
-            each city is in rather than implying same-day delivery everywhere. */}
+        {/* Coverage — contextual internal links to every city page. Delhi NCR
+            only; see NCR_CITIES. */}
         <div className="mt-16 border-t border-line pt-8">
           <h2 className="text-[11px] font-semibold uppercase tracking-[0.2em] text-text-muted">
-            Where we deliver
+            Where we deliver — Delhi NCR only
           </h2>
           <p className="mt-4 text-sm leading-relaxed text-text-secondary">
-            <span className="text-text-primary">Equipment, live: </span>
-            {LIVE_SERVICE_AREAS.map((area, i) => (
+            {NCR_CITIES.map((area, i) => (
               <span key={area.slug}>
                 <Link
                   href={`/locations/${area.slug}`}
@@ -177,14 +175,13 @@ export function Footer() {
                 >
                   {area.name}
                 </Link>
-                {i < LIVE_SERVICE_AREAS.length - 1 ? ", " : ""}
+                {i < NCR_CITIES.length - 1 ? ", " : ""}
               </span>
             ))}
-          </p>
-          <p className="mt-2.5 text-sm leading-relaxed text-text-muted">
-            <span className="text-text-secondary">Encone Care network: </span>
-            {CARE_NETWORK_AREAS.map((a) => a.name).join(", ")} — nursing on the
-            ground, equipment on request.
+            {" · "}
+            <Link href="/locations" className="text-text-primary underline-offset-4 hover:underline">
+              Check your pincode
+            </Link>
           </p>
         </div>
 

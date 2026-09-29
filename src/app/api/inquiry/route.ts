@@ -7,15 +7,15 @@ export const dynamic = "force-dynamic";
 /**
  * Lead intake.
  *
- * ⚠️ NOT YET WIRED TO A DESTINATION. Right now a validated enquiry is written
- * to the server log and nothing else — no email, no CRM, no database. That is
- * fine for local development and actively dangerous in production: every lead
- * would be silently lost, and `15-emergency-user-behavior.md` classes an
- * unanswered urgent enquiry as a high-severity operational failure, not a
- * missed marketing opportunity.
+ * Delivered via Telegram — see `deliverLead()`. `TELEGRAM_BOT_TOKEN` and
+ * `TELEGRAM_CHAT_ID` (comma-separated for more than one recipient) live in
+ * `.env.local`, never in source. No NEXT_PUBLIC_ prefix: these must stay
+ * server-side only.
  *
- * Before launch, replace `deliverLead()` with a real destination (transactional
- * email to the ops inbox + a row in a database) and add alerting on failure.
+ * A database is still worth adding before real volume arrives — Telegram is
+ * fire-and-forget with no query-able history — but it is no longer true that
+ * a lead vanishes if nobody reads the log, which was the actual risk
+ * `15-emergency-user-behavior.md` flags an unanswered urgent enquiry against.
  */
 
 /** Naive fixed-window limiter, keyed by IP. */
@@ -43,13 +43,102 @@ setInterval(() => {
   for (const [key, entry] of hits) if (now > entry.resetAt) hits.delete(key);
 }, WINDOW_MS).unref?.();
 
+/** HTML special characters Telegram's HTML parse mode requires escaped. */
+function escapeHtml(value: string): string {
+  return value
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;");
+}
+
+const INTENT_LABELS: Record<string, string> = {
+  rent: "Rent",
+  buy: "Buy",
+  "not-sure": "Not sure yet",
+};
+
+function formatLeadMessage(lead: Record<string, unknown>): string {
+  const name = escapeHtml(String(lead.name ?? ""));
+  const phone = escapeHtml(String(lead.phone ?? ""));
+  const city = escapeHtml(String(lead.city ?? ""));
+  const equipment = escapeHtml(String(lead.equipment ?? ""));
+  const intent = INTENT_LABELS[String(lead.intent)] ?? escapeHtml(String(lead.intent ?? ""));
+  const message = lead.message ? escapeHtml(String(lead.message)) : null;
+
+  const lines = [
+    "🩺 <b>New enquiry — Encone Med</b>",
+    "",
+    `<b>Name:</b> ${name}`,
+    `<b>Phone:</b> <a href="tel:${encodeURIComponent(phone)}">${phone}</a>`,
+    `<b>City:</b> ${city}`,
+    `<b>Equipment:</b> ${equipment}`,
+    `<b>Wants to:</b> ${intent}`,
+  ];
+  if (message) lines.push(`<b>Message:</b> ${message}`);
+  lines.push("", `<i>${new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" })} IST</i>`);
+
+  return lines.join("\n");
+}
+
+/**
+ * Sends the lead to every configured Telegram chat.
+ *
+ * A comma-separated `TELEGRAM_CHAT_ID` fans a single lead out to several
+ * recipients — e.g. more than one person on call duty. Every recipient must
+ * succeed or this throws, matching the route's existing "delivery failed"
+ * error path; a lead that reached one phone but silently not another is
+ * exactly the kind of partial failure worth surfacing rather than swallowing.
+ */
 async function deliverLead(lead: Record<string, unknown>) {
-  // TODO: send to the ops inbox and persist. Until then, at least make the
-  // lead visible in the deployment logs.
-  console.info("[inquiry] new lead", {
-    ...lead,
-    receivedAt: new Date().toISOString(),
-  });
+  const token = process.env.TELEGRAM_BOT_TOKEN;
+  const chatIdsRaw = process.env.TELEGRAM_CHAT_ID;
+
+  if (!token || !chatIdsRaw) {
+    // A silent success in production would lose the lead; the form then tells the visitor to call.
+    if (process.env.NODE_ENV === "production") {
+      console.error("[inquiry] TELEGRAM_BOT_TOKEN/TELEGRAM_CHAT_ID missing in production", lead);
+      throw new Error("Telegram is not configured");
+    }
+    console.info("[inquiry] TELEGRAM_BOT_TOKEN/TELEGRAM_CHAT_ID not set — logging only", {
+      ...lead,
+      receivedAt: new Date().toISOString(),
+    });
+    return;
+  }
+
+  const chatIds = chatIdsRaw
+    .split(",")
+    .map((id) => id.trim())
+    .filter(Boolean);
+
+  const text = formatLeadMessage(lead);
+  const url = `https://api.telegram.org/bot${token}/sendMessage`;
+
+  const results = await Promise.allSettled(
+    chatIds.map(async (chat_id) => {
+      const res = await fetch(url, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          chat_id,
+          text,
+          parse_mode: "HTML",
+          disable_web_page_preview: true,
+        }),
+      });
+      const body = await res.json().catch(() => null);
+      if (!res.ok || !body?.ok) {
+        throw new Error(
+          `Telegram sendMessage failed for chat ${chat_id}: ${res.status} ${JSON.stringify(body)}`,
+        );
+      }
+    }),
+  );
+
+  const failures = results.filter((r): r is PromiseRejectedResult => r.status === "rejected");
+  if (failures.length > 0) {
+    throw new Error(failures.map((f) => f.reason?.message ?? String(f.reason)).join("; "));
+  }
 }
 
 export async function POST(request: Request) {

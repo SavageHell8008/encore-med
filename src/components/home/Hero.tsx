@@ -73,7 +73,7 @@ export function Hero() {
               className="mt-8 max-w-xl text-base leading-relaxed text-text-secondary"
             >
               Hospital beds, oxygen concentrators, BiPAP machines and complete
-              home ICU setups — on rent or for sale in Delhi. Delivered,
+              home ICU setups — on rent or for sale across Delhi NCR. Delivered,
               installed and demonstrated by a technician, usually within four
               hours. Tell us what you need and we will quote for it.
             </motion.p>

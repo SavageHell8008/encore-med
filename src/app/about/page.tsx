@@ -7,9 +7,9 @@ import { BRAND, TRUST_PILLARS } from "@/lib/constants";
 import { buildMetadata } from "@/lib/seo";
 
 export const metadata = buildMetadata({
-  title: "About Encone Care — Medical Equipment in Delhi",
+  title: "About Encone Care — Medical Equipment in Delhi NCR",
   description:
-    "Encone Care rents and sells medical equipment across Delhi, owning its own fleet rather than listing other people's stock. Documented sanitisation, technician setup, honest quotes.",
+    "Encone Care rents and sells medical equipment across Delhi NCR, owning its own fleet rather than listing other people's stock. Documented sanitisation, technician setup, honest quotes.",
   path: "/about",
 });
 
@@ -42,7 +42,7 @@ export default function AboutPage() {
             </a>
             , operated by {BRAND.legalName}. We rent and sell hospital beds,
             oxygen concentrators, BiPAP machines, wheelchairs, patient monitors
-            and complete home ICU setups across Delhi.
+            and complete home ICU setups across Delhi NCR.
           </p>
 
           <p>
@@ -84,8 +84,9 @@ export default function AboutPage() {
           <p>
             We also do not list thirty cities we cannot reach. We deliver where
             we can install the equipment, demonstrate it to whoever is doing the
-            caring, and get a replacement out the same night if it fails. Today
-            that is Delhi. It will expand when the operations do, not before.
+            caring, and get a replacement out the same night if it fails. That is
+            Delhi NCR — Delhi, Noida, Greater Noida, Gurgaon, Ghaziabad and
+            Faridabad — and nowhere else.
           </p>
 
           <h2 className="pt-4 text-xl font-bold tracking-tight text-text-primary sm:text-2xl">
