@@ -342,6 +342,20 @@ export const DEFAULT_KEYWORDS = [
   "bipap machine price india",
   "icu setup at home delhi",
   "medical equipment rental delhi ncr",
+  "suction machine rental near me",
+  "encone care",
+  "surgical bed on rent",
+  "encone",
+  "hospital beds near me",
+  "hospital bed on rent in delhi",
+  "oxygen concentrator on rent in noida",
+  "medical equipment on rent near me",
+  "bipap machine on rent",
+  "home care medical equipment",
+  "medical equipment rental in delhi",
+  "medical equipment on rent",
+  "medical equipment on rent in west delhi",
+  "suction catheter",
 ] as const;
 
 export const OG_IMAGE = {

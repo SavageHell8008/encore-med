@@ -55,9 +55,9 @@ export const PRODUCTS: Product[] = [
 
   {
     slug: "hospital-bed",
-    name: "Hospital Bed",
+    name: "Surgical Bed on Rent",
     summary:
-      "Two- and three-function manual hospital bed with adjustable backrest and knee-rest, side rails and locking castors — the standard bed for home care after a hospital discharge.",
+      "Two- and three-function manual hospital bed with adjustable backrest and knee-rest, side rails and locking castors — the standard surgical bed for home care after a hospital discharge.",
     categorySlug: "hospital-beds",
     useCaseSlugs: ["cannot-get-out-of-bed", "post-surgery-recovery", "elderly-daily-care"],
     description:
@@ -188,9 +188,9 @@ export const PRODUCTS: Product[] = [
 
   {
     slug: "oxygen-concentrator",
-    name: "Oxygen Concentrator",
+    name: "Oxygen Concentrator on Rent",
     summary:
-      "5 LPM and 10 LPM continuous-flow oxygen concentrators with humidifier, low-purity alarm and power-failure alarm — supplied only against a prescribed flow rate.",
+      "Get an oxygen concentrator on rent in Noida and across Delhi NCR. 5 LPM and 10 LPM continuous-flow oxygen concentrators with humidifier, low-purity alarm and power-failure alarm — supplied only against a prescribed flow rate.",
     categorySlug: "oxygen-therapy",
     useCaseSlugs: ["breathing-difficulty", "critical-care-at-home", "elderly-daily-care"],
     description:
@@ -309,9 +309,9 @@ export const PRODUCTS: Product[] = [
 
   {
     slug: "bipap-machine",
-    name: "BiPAP Machine",
+    name: "BiPAP Machine on Rent",
     summary:
-      "Bi-level positive airway pressure machine with heated humidifier, supplied with an in-person mask fitting and clinician-set pressures.",
+      "Get the best BiPAP machine on rent. Bi-level positive airway pressure machine with heated humidifier, supplied with an in-person mask fitting and clinician-set pressures.",
     categorySlug: "bipap-cpap",
     useCaseSlugs: ["breathing-difficulty", "critical-care-at-home"],
     description:
@@ -531,9 +531,9 @@ export const PRODUCTS: Product[] = [
 
   {
     slug: "suction-machine",
-    name: "Suction Machine",
+    name: "Suction Machine on Rent",
     summary:
-      "Mains-powered surgical suction unit with adjustable vacuum regulator and autoclavable collection jars, for airway clearance in tracheostomy and bedbound patients.",
+      "Mains-powered surgical suction machine rental with adjustable vacuum regulator and autoclavable collection jars, for airway clearance in tracheostomy and bedbound patients.",
     categorySlug: "suction",
     useCaseSlugs: ["critical-care-at-home", "cannot-get-out-of-bed"],
     description:

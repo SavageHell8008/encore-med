@@ -21,18 +21,18 @@ import { buildMetadata } from "@/lib/seo";
 import type { Faq } from "@/lib/types";
 
 export const metadata = buildMetadata({
-  title: "Medical Equipment on Rent & Sale in Delhi NCR",
+  title: "Medical Equipment on Rent in Delhi NCR",
   description:
-    "Rent or buy hospital beds, oxygen concentrators, BiPAP machines and home ICU setups across Delhi NCR. Own fleet, documented sanitisation, technician-installed. Get the best quote.",
+    "Looking for medical equipment on rent near me? Encone Care provides medical equipment rental in Delhi and West Delhi. Rent or buy hospital beds, suction machines, oxygen concentrators, and home care medical equipment.",
   path: "/",
 });
 
 /** Answer-first responses to the questions people actually type. */
 const HOME_FAQS: Faq[] = [
   {
-    question: "Where can I rent medical equipment in Delhi NCR?",
+    question: "Where can I find medical equipment on rent near me?",
     answer:
-      "Encone Care rents and sells medical equipment across Delhi NCR — Delhi, Noida, Greater Noida, Gurgaon, Ghaziabad and Faridabad — usually delivered and installed within four hours. The catalogue covers hospital beds, oxygen concentrators, BiPAP and CPAP machines, wheelchairs, patient monitors and complete home ICU setups.",
+      "If you are looking for medical equipment on rent in Delhi (including West Delhi), Noida, Greater Noida, Gurgaon, Ghaziabad or Faridabad, Encone Care delivers and installs within four hours. We supply home care medical equipment including surgical beds on rent, oxygen concentrators, BiPAP machines, and suction machine rentals near you.",
   },
   {
     question: "Is it cheaper to rent or buy medical equipment?",
