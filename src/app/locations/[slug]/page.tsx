@@ -198,14 +198,14 @@ export default async function LocationPage({ params }: { params: Params }) {
           <h2 className="text-xl font-bold tracking-tight text-text-primary sm:text-2xl">
             Available to rent in {area.name}
           </h2>
-          <ProductGrid products={forRent} className="mt-8" priorityCount={3} />
+          <ProductGrid products={forRent} className="mt-8" priorityCount={3} locationSlug={area.slug} />
         </section>
 
         <section className="mt-20">
           <h2 className="text-xl font-bold tracking-tight text-text-primary sm:text-2xl">
             Available to buy in {area.name}
           </h2>
-          <ProductGrid products={products} className="mt-8" />
+          <ProductGrid products={products} className="mt-8" locationSlug={area.slug} />
         </section>
 
         <div className="mt-20">
