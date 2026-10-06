@@ -28,7 +28,7 @@ const BADGE_META: Record<string, { label: string; className: string; icon?: Luci
  * single action under the card takes the visitor to the product page, where
  * specs, safety information and the quote form live together.
  */
-export function ProductCard3D({ product, priority = false }: { product: Product; priority?: boolean }) {
+export function ProductCard3D({ product, priority = false, locationSlug }: { product: Product; priority?: boolean; locationSlug?: string }) {
   const ref = useRef<HTMLDivElement>(null);
   const [hovered, setHovered] = useState(false);
 
@@ -79,7 +79,7 @@ export function ProductCard3D({ product, priority = false }: { product: Product;
       >
         {/* Image */}
         <Link
-          href={`/products/${product.slug}`}
+          href={locationSlug ? `/locations/${locationSlug}/${product.slug}` : `/products/${product.slug}`}
           tabIndex={-1}
           aria-hidden
           className="relative block aspect-square overflow-hidden bg-surface-sunken/50"
@@ -130,7 +130,7 @@ export function ProductCard3D({ product, priority = false }: { product: Product;
         <div className="flex flex-1 flex-col p-5">
           <h3 className="text-base font-semibold leading-snug text-text-primary">
             <Link
-              href={`/products/${product.slug}`}
+              href={locationSlug ? `/locations/${locationSlug}/${product.slug}` : `/products/${product.slug}`}
               className="after:absolute after:inset-0 after:content-['']"
             >
               {product.name}
@@ -159,7 +159,7 @@ export function ProductCard3D({ product, priority = false }: { product: Product;
           {/* Action buttons under the card */}
           <div className="relative z-10 mt-4 grid grid-cols-2 gap-2">
             <Link
-              href={`/products/${product.slug}`}
+              href={locationSlug ? `/locations/${locationSlug}/${product.slug}` : `/products/${product.slug}`}
               className={cn(
                 "inline-flex items-center justify-center gap-1 rounded-xl border px-2 py-2 text-xs font-semibold whitespace-nowrap transition-all duration-200",
                 hovered

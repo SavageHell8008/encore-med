@@ -7,10 +7,12 @@ export function ProductGrid({
   className,
   /** Number of cards that should load eagerly (above the fold). */
   priorityCount = 0,
+  locationSlug,
 }: {
   products: Product[];
   className?: string;
   priorityCount?: number;
+  locationSlug?: string;
 }) {
   if (products.length === 0) {
     return (
@@ -25,7 +27,7 @@ export function ProductGrid({
     <ul className={cn("grid gap-5 sm:grid-cols-2 lg:grid-cols-3", className)}>
       {products.map((product, i) => (
         <li key={product.slug} className="h-full">
-          <ProductCard3D product={product} priority={i < priorityCount} />
+          <ProductCard3D product={product} priority={i < priorityCount} locationSlug={locationSlug} />
         </li>
       ))}
     </ul>
